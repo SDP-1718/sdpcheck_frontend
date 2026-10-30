@@ -4,6 +4,7 @@ import Placeholder from '../pages/Placeholder'
 import Onboarding from '../pages/onboarding/Onboarding'
 import Root from './Root'
 import Home from '../pages/home/Home'
+import { Notices, NoticeDetail } from '../pages/notices/Notices'
 
 const routes = [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
@@ -11,7 +12,8 @@ const routes = [
   { path: '/onboarding/preview', element: <Placeholder title="로그인" /> },
   { path: '/home', element: <Home /> },
   { path: '/attendance', element: <Placeholder title="출석체크" /> },
-  { path: '/notices', element: <Placeholder title="공지사항" /> },
+  { path: '/notices', element: <Notices /> },
+  { path: '/notices/:id', element: <NoticeDetail /> },
   { path: '/schedule', element: <Placeholder title="일정" /> },
   { path: '/mypage', element: <Placeholder title="마이페이지" /> },
   { path: '/admin', element: <Navigate to="/admin/sessions" replace /> },

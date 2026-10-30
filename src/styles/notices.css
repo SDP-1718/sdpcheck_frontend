@@ -1,0 +1,12 @@
+.notice-list { background: #fff; }
+.notice-row { min-height: 91px; display: flex; align-items: center; justify-content: space-between; padding: 20px; border-bottom: 1px solid var(--disabled); gap: 10px; }
+.notice-row > div { min-width: 0; }
+.notice-row time { font-size: 12px; line-height: 16px; color: var(--secondary); display: block; }
+.notice-row h2 { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--secondary); margin-top: 4px; overflow-wrap: anywhere; }
+.notice-detail .page-header { margin-inline: 20px; padding-inline: 0; border-bottom: 1px solid #7e7e7e; }
+.notice-detail .back-button { left: -10px; }
+.notice-content { padding: 24px 20px 50px; }
+.notice-content > h2 { font-size: 20px; line-height: 28px; font-weight: 400; }
+.notice-meta { font-size: 12px; line-height: 16px; color: var(--muted); margin-top: 8px; }
+.notice-body { font-size: 16px; line-height: 24px; white-space: pre-wrap; margin-top: 50px; overflow-wrap: anywhere; }
+.notice-image { height: 219px; margin-top: 34px; border-radius: 4px; background: #ededed; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; color: var(--muted); font-size: 12px; line-height: 16px; }
