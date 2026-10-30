@@ -1,9 +1,6 @@
-function App() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100">
-      <h1 className="text-3xl font-bold text-blue-600">SDP CHECK</h1>
-    </main>
-  )
-}
+import { RouterProvider } from 'react-router'
+import { router } from './app/router'
 
-export default App
+export default function App() {
+  return <RouterProvider router={router} />
+}
