@@ -6,12 +6,16 @@ import Root from './Root'
 import Home from '../pages/home/Home'
 import { Notices, NoticeDetail } from '../pages/notices/Notices'
 
+import Attendance from '../pages/attendance/Attendance'
+import AttendancePreview from '../pages/attendance/AttendancePreview'
+
 const routes = [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
   { path: '/onboarding', element: <Onboarding /> },
   { path: '/onboarding/preview', element: <Placeholder title="로그인" /> },
   { path: '/home', element: <Home /> },
-  { path: '/attendance', element: <Placeholder title="출석체크" /> },
+  { path: '/attendance', element: <Attendance /> },
+  ...(import.meta.env.DEV ? [{ path: '/attendance/preview/:status', element: <AttendancePreview /> }] : []),
   { path: '/notices', element: <Notices /> },
   { path: '/notices/:id', element: <NoticeDetail /> },
   { path: '/schedule', element: <Placeholder title="일정" /> },
