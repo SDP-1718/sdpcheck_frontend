@@ -1,4 +1,4 @@
-import type { Notice, Schedule } from '../types'
+import type { Member, Notice, Schedule } from '../types'
 
 export const initialNotices: Notice[] = [
   { id: '1', title: '9/18 정규세션 장소 변경 안내', date: '2026.09.08', author: '운영진 전은우', pinned: false, body: '안녕하세요, 학회원 여러분.\n\n9월 18일 정규 세션 장소가 변경되었습니다. 기존 공학관 302호에서 공학관 B101호로 변경되오니 착오 없으시길 바랍니다.\n\n일시: 2026년 9월 18일(금) 오후 7시\n장소: 공학관 B101호\n\n주차 공간이 협소하니 대중교통 이용을 권장합니다. 혹시 장소 관련 문의사항이 있으시면 운영진 단체 채팅방에 남겨주세요.\n\n많은 참여 부탁드립니다. 감사합니다.' },
@@ -9,4 +9,10 @@ export const initialNotices: Notice[] = [
 export const initialSchedules: Schedule[] = [
   { id: '1', title: '정규 세션', date: '2026-09-18', time: '19:00', location: '이화여대 ECC' },
   { id: '2', title: '정규 세션', date: '2026-09-18', time: '19:00', location: '이화여대 ECC' },
+]
+export const initialMembers: Member[] = [
+  { id: '1', name: '신주희', generation: 17, admin: false, attendance: 3, late: 1, absent: 8 },
+  { id: '2', name: '이서윤', generation: 18, admin: false, attendance: 3, late: 1, absent: 8 },
+  { id: '3', name: '이현승', generation: 17, admin: true, attendance: 3, late: 1, absent: 8 },
+  ...Array.from({ length: 4 }, (_, i) => ({ id: String(i + 4), name: '박예승', generation: 17, admin: false, attendance: 3, late: 1, absent: 8 })),
 ]

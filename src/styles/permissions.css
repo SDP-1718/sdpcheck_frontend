@@ -1,0 +1,14 @@
+.permissions .generation-filter { margin: 0 29px 38px; }
+.generation-filter > span { display: block; font-size: 14px; line-height: 20px; margin-bottom: 10px; }
+.generation-filter > button { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 52px; padding: 14px; background: #fff; border-radius: 12px; font-size: 16px; line-height: 24px; color: var(--secondary); box-shadow: 0 4px 15px #00000005; }
+.permissions > .section-label { margin: 0 20px 13px; }
+.permission-row { min-height: 81px; padding: 14px 16px 14px 20px; display: flex; align-items: center; justify-content: space-between; background: #fff; border-bottom: 1px solid var(--background); }
+.permission-row p { color: var(--secondary); font-size: 12px; line-height: 16px; }
+.permission-row h3 { font-weight: 600; font-size: 16px; line-height: 24px; margin-top: 4px; }
+.permission-button { min-width: 72px; min-height: 32px; border-radius: 8px; background: var(--accent); font-weight: 700; font-size: 12px; line-height: 16px; }
+.permission-button.revoke { background: var(--disabled); color: #f33; }
+.permissions-empty { padding: 80px 20px; color: var(--secondary); font-size: 14px; text-align: center; }
+.permission-generation-sheet { height: calc(316px + env(safe-area-inset-bottom)); padding: 0 20px calc(36px + env(safe-area-inset-bottom)); }
+.permission-generation-sheet .sheet-heading { min-height: 20px; margin-bottom: 16px; }
+.permission-generation-sheet .sheet-heading h2 { font-size: 14px; line-height: 20px; color: var(--muted); }
+.generation-option { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 52px; padding: 0; font-size: 16px; line-height: 24px; text-align: left; }

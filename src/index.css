@@ -3,3 +3,7 @@
 @import "./styles/onboarding.css";
 @import "./styles/home.css";
 @import "./styles/notices.css";
+@import "./styles/attendance.css";
+@import "./styles/confirm-dialog.css";
+@import "./styles/mypage.css";
+@import "./styles/permissions.css";

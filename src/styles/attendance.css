@@ -1,0 +1,48 @@
+.attendance-scan,
+.attendance-result {
+  position: relative;
+  min-height: max(560px, 100dvh);
+  width: 100%;
+  overflow: hidden;
+}
+
+.attendance-scan { background: #c4c4c4; }
+.attendance-scan-header { position: absolute; top: 66px; left: 20px; right: 20px; }
+.attendance-scan-header h1 { font-size: 24px; line-height: 36px; font-weight: 400; }
+.attendance-scan-header p { font-size: 14px; line-height: 20px; margin-top: 2px; }
+.attendance-viewfinder {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  top: calc(50% - 130px);
+  left: calc(50% - 130px);
+  background: var(--background);
+}
+.attendance-viewfinder video { width: 100%; height: 100%; object-fit: cover; }
+.attendance-camera-clock { position: absolute; left: calc(50% - 20px); top: calc(50% - 20px); color: var(--disabled); }
+.attendance-scan-line { position: absolute; height: 2px; top: 40%; left: 16px; right: 16px; background: var(--accent); }
+.scan-corner { position: absolute; width: 16px; height: 16px; border: solid #181818; border-width: 0; border-radius: 2px; }
+.scan-corner.top-left { top: 0; left: 0; border-top-width: 3px; border-left-width: 3px; }
+.scan-corner.top-right { top: 0; right: 0; border-top-width: 3px; border-right-width: 3px; }
+.scan-corner.bottom-left { bottom: 0; left: 0; border-bottom-width: 3px; border-left-width: 3px; }
+.scan-corner.bottom-right { bottom: 0; right: 0; border-bottom-width: 3px; border-right-width: 3px; }
+.attendance-camera-message { position: absolute; top: calc(50% + 150px); left: 32px; right: 32px; color: #292929; text-align: center; font-size: 14px; line-height: 20px; }
+.attendance-camera-message button { margin-top: 10px; padding: 8px 16px; background: var(--background); border: 1px solid #999; border-radius: 10px; }
+.attendance-bottom { position: absolute; bottom: max(37px, env(safe-area-inset-bottom)); left: 20px; right: 19px; min-height: 58px; display: flex; align-items: center; justify-content: center; font-size: 16px; line-height: 24px; border-radius: 15px; }
+.attendance-cancel { border: 0; }
+.attendance-result { background: var(--background); }
+.attendance-result-content { position: absolute; top: calc(50% - 96px); left: 16px; right: 16px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.attendance-status-icon { width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: #181818; }
+.attendance-late .attendance-status-icon { background: var(--disabled); }
+.attendance-duplicate .attendance-status-icon { background: #454545; }
+.attendance-expired .attendance-status-icon { background: #e33c34; color: #fff; }
+.attendance-result-content h1 { margin-top: 20px; font-size: 28px; line-height: 36px; font-weight: 400; }
+.attendance-result-content p { color: #b6b6b6; font-size: 12px; line-height: 16px; }
+.attendance-return { border: 1px solid #b8b8b8; background: transparent; }
+@media (max-height: 600px) {
+  .attendance-scan-header { top: 36px; }
+  .attendance-viewfinder { width: 220px; height: 220px; left: calc(50% - 110px); top: calc(50% - 110px); }
+  .attendance-camera-message { top: calc(50% + 112px); font-size: 12px; line-height: 16px; }
+  .attendance-camera-message button { margin-top: 4px; padding: 4px 10px; font-size: 12px; }
+  .attendance-bottom { bottom: max(20px, env(safe-area-inset-bottom)); }
+}
