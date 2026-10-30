@@ -1,0 +1,7 @@
+.onboarding { min-height: max(700px, 100dvh); position: relative; overflow: hidden; background: linear-gradient(153.45deg, #f3f4f62b 28.194%, #f3f4f633 5.3696%, #e8f8a833 90.506%), #fff; }
+.onboarding-glow { position: absolute; top: -359px; left: 2px; }
+.brand { position: absolute; top: calc(50% - 74.825px); left: 0; right: 0; }
+.brand-mark { width: 151.294px; height: 117.9px; position: relative; margin-left: calc(50% - 75.608px); }
+.brand-mark strong { position: absolute; top: 73.016px; left: 46.924px; font-family: 'Arial', sans-serif; font-weight: 700; font-size: 38.986px; line-height: 1.174; letter-spacing: -1.5px; background: #fcfdf8; width: 104.37px; }
+.brand > p { font-size: 16px; line-height: 24px; text-align: center; margin-top: 67.175px; }
+.kakao-button { position: absolute; bottom: 36px; left: 20px; right: 19px; height: 59px; border-radius: 15px; background: #fee500; color: #191919; font-size: 16px; font-weight: 600; display: flex; gap: 8px; align-items: center; justify-content: center; }
