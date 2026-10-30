@@ -13,6 +13,7 @@ import Permissions from '../pages/admin/Permissions'
 
 import AdminLayout from '../pages/admin/AdminLayout'
 import Sessions, { SessionEditor } from '../pages/admin/Sessions'
+import { AdminNotices, NoticeEditor } from '../pages/admin/AdminNotices'
 
 const routes = [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
@@ -29,8 +30,10 @@ const routes = [
   { element: <AdminLayout />, children: [
     { path: '/admin/sessions', element: <Sessions /> },
     { path: '/admin/sessions/new', element: <><Sessions /><SessionEditor /></> },
+    { path: '/admin/notices', element: <AdminNotices /> },
+    { path: '/admin/notices/new', element: <><AdminNotices /><NoticeEditor /></> },
+    { path: '/admin/notices/:id/edit', element: <><AdminNotices /><NoticeEditor /></> },
   ] },
-  { path: '/admin/notices', element: <Placeholder title="관리자 공지" /> },
   { path: '/admin/schedule', element: <Placeholder title="관리자 일정" /> },
   { path: '/admin/statistics', element: <Placeholder title="관리자 통계" /> },
   { path: '/admin/permissions', element: <Permissions /> },
