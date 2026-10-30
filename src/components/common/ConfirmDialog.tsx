@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef } from 'react'
 import type { ReactNode } from 'react'
+import { lockModalScroll } from '../../utils/modalScrollLock'
 
 interface ConfirmDialogProps {
   title: string
@@ -15,10 +16,9 @@ export default function ConfirmDialog({ title, children, confirmLabel, onConfirm
   const descriptionId = useId()
   useEffect(() => {
     const element = dialog.current!
-    const previousOverflow = document.body.style.overflow
+    const releaseScroll = lockModalScroll()
     element.showModal()
-    document.body.style.overflow = 'hidden'
-    return () => { element.close(); document.body.style.overflow = previousOverflow }
+    return () => { element.close(); releaseScroll() }
   }, [])
 
   return (
