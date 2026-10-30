@@ -14,6 +14,7 @@ import Permissions from '../pages/admin/Permissions'
 import AdminLayout from '../pages/admin/AdminLayout'
 import Sessions, { SessionEditor } from '../pages/admin/Sessions'
 import { AdminNotices, NoticeEditor } from '../pages/admin/AdminNotices'
+import { AdminSchedule, ScheduleEditor } from '../pages/admin/AdminSchedule'
 
 const routes = [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
@@ -33,8 +34,10 @@ const routes = [
     { path: '/admin/notices', element: <AdminNotices /> },
     { path: '/admin/notices/new', element: <><AdminNotices /><NoticeEditor /></> },
     { path: '/admin/notices/:id/edit', element: <><AdminNotices /><NoticeEditor /></> },
+    { path: '/admin/schedule', element: <AdminSchedule /> },
+    { path: '/admin/schedule/new', element: <><AdminSchedule /><ScheduleEditor /></> },
+    { path: '/admin/schedule/:id/edit', element: <><AdminSchedule /><ScheduleEditor /></> },
   ] },
-  { path: '/admin/schedule', element: <Placeholder title="관리자 일정" /> },
   { path: '/admin/statistics', element: <Placeholder title="관리자 통계" /> },
   { path: '/admin/permissions', element: <Permissions /> },
   { path: '*', element: <Placeholder title="페이지를 찾을 수 없습니다" /> },
