@@ -1,0 +1,22 @@
+.greeting { padding: 66px 20px 18px; display: flex; justify-content: space-between; align-items: center; }
+.greeting p, .admin-header p { font-size: 14px; line-height: 20px; }
+.greeting h1, .admin-header h1 { font-size: 24px; line-height: 32px; font-weight: 400; margin-top: 2px; }
+.avatar { display: grid; place-items: center; width: 44px; height: 44px; background: var(--accent); border-radius: 50%; font-size: 16px; font-weight: 600; }
+.session-card { height: 375px; background: #fff; border-radius: 16px; margin: 0 20px; position: relative; overflow: hidden; }
+.session-copy { position: absolute; top: 25px; left: 26px; right: 20px; }
+.session-copy p { font-size: 12px; line-height: 16px; font-weight: 700; color: var(--secondary); }
+.session-copy h2 { margin-top: 1px; font-size: 20px; line-height: 28px; font-weight: 400; }
+.calendar-image { position: absolute; top: 101px; left: calc(50% - 91.5px); width: 183px; height: 183px; object-fit: cover; opacity: .9; }
+.calendar-shadow { box-shadow: none; }
+.attendance-button { position: absolute; left: 26px; bottom: 17px; width: calc(100% - 52px); min-height: 51px; border-radius: 10px; font-weight: 600; color: var(--secondary); }
+.home-stats { margin: 8px 20px 0; display: flex; gap: 12px; }
+.home-stats > div { min-width: 0; flex: 1; height: 84px; border-radius: 16px; background: #fff; padding: 14px 16px 8px; box-shadow: 0 4px 15px #00000005; }
+.home-stats h2 { font-size: 12px; font-weight: 700; line-height: 16px; }
+.home-stats p { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; gap: 5px; }
+.home-stats strong { font-size: 24px; line-height: 32px; font-weight: 400; white-space: nowrap; }
+.home-stats span { font-size: 12px; line-height: 16px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.home-notices { background: #fff; padding: 8px 20px; }
+.home-notices a { display: flex; align-items: center; justify-content: space-between; height: 52px; font-size: 14px; line-height: 20px; gap: 4px; }
+.home .section-title:has(+ .home-schedules) { margin-top: 15px; }
+.home-schedules { background: #fff; }
+@media (max-width: 360px) { .home-stats > div { padding-inline: 12px; } .home-stats span { font-size: 10px; } .home-stats strong { font-size: 22px; } .session-copy h2 { font-size: 18px; } .home-notices a { font-size: 13px; } .schedule-row { gap: 14px; } }

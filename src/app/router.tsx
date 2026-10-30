@@ -2,12 +2,14 @@ import { createBrowserRouter, Navigate } from 'react-router'
 import Layout from '../components/layout/Layout'
 import Placeholder from '../pages/Placeholder'
 import Onboarding from '../pages/onboarding/Onboarding'
+import Root from './Root'
+import Home from '../pages/home/Home'
 
 const routes = [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
   { path: '/onboarding', element: <Onboarding /> },
   { path: '/onboarding/preview', element: <Placeholder title="로그인" /> },
-  { path: '/home', element: <Placeholder title="홈" /> },
+  { path: '/home', element: <Home /> },
   { path: '/attendance', element: <Placeholder title="출석체크" /> },
   { path: '/notices', element: <Placeholder title="공지사항" /> },
   { path: '/schedule', element: <Placeholder title="일정" /> },
@@ -21,4 +23,4 @@ const routes = [
   { path: '*', element: <Placeholder title="페이지를 찾을 수 없습니다" /> },
 ]
 
-export const router = createBrowserRouter([{ element: <Layout />, children: routes }] )
+export const router = createBrowserRouter([{ element: <Root />, children: [{ element: <Layout />, children: routes }] }] )
