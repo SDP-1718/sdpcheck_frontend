@@ -7,3 +7,6 @@
 @import "./styles/confirm-dialog.css";
 @import "./styles/mypage.css";
 @import "./styles/permissions.css";
+@import "./styles/admin-base.css";
+@import "./styles/admin-sessions.css";
+@import "./styles/date-time.css";

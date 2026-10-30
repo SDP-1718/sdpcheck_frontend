@@ -1,0 +1,30 @@
+.admin-session-card { border-radius: 16px; background: #fff; margin: 20px; padding: 26px 26px 18px; }
+.session-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.session-card-heading p { font-size: 12px; line-height: 16px; font-weight: 700; color: var(--secondary); }
+.session-card-heading span { display: flex; align-items: center; gap: 4px; font-size: 10px; line-height: 16px; color: var(--secondary); }
+.admin-session-card h2 { font-size: 20px; line-height: 28px; font-weight: 400; margin-top: 2px; }
+.admin-session-card .primary { margin-top: 31px; min-height: 50px; border-radius: 10px; font-weight: 600; }
+.qr-card { margin: 20px; background: #fff; border-radius: 16px; padding: 30px 24px 35px 36px; }
+.qr { margin-left: calc(50% - 105.5px); }
+.countdown-row { display: flex; align-items: center; gap: 12px; margin-top: 29px; }
+.countdown { width: 56px; height: 56px; position: relative; display: grid; place-items: center; }
+.countdown img { position: absolute; transform: rotate(-90deg); }
+.countdown strong { font-size: 13px; line-height: 19.5px; }
+.countdown-row p { color: var(--muted); font-size: 13px; line-height: 19.5px; }
+.countdown-row p strong { display: block; color: #000; font-weight: 600; }
+.checkin-summary { display: flex; justify-content: space-between; font-size: 13px; line-height: 19.5px; font-weight: 600; margin-top: 16px; }
+.qr-card progress { display: block; width: 100%; height: 6px; margin-top: 8px; border: 0; appearance: none; background: var(--disabled); border-radius: 99px; overflow: hidden; }
+.qr-card progress::-webkit-progress-bar { background: var(--disabled); }
+.qr-card progress::-webkit-progress-value { background: #000; border-radius: 99px; }
+.qr-card progress::-moz-progress-bar { background: #000; border-radius: 99px; }
+.checkin-heading { margin-top: 28px; }
+.checkin-row { display: flex; align-items: center; justify-content: space-between; min-height: 81px; padding: 10px 20px; background: #fff; border-bottom: 1px solid var(--background); }
+.checkin-row h3 { font-size: 16px; line-height: 24px; font-weight: 600; }
+.checkin-row p { font-size: 12px; line-height: 16px; color: var(--muted); }
+.attendance-badge { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 12px; background: var(--accent); font-weight: 600; }
+.session-is-ended .qr, .session-is-ended .countdown-row, .session-is-ended .checkin-summary, .session-is-ended progress { opacity: .38; }
+.ended-session-button { margin-top: 30px; min-height: 48px; border-radius: 10px; font-size: 16px; }
+.session-repeat { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; font-size: 14px; line-height: 20px; }
+.session-weekdays { display: flex; gap: 10px; margin-top: 10px; }
+.session-weekdays button { flex: 1; min-width: 0; height: 36px; border: 1px solid var(--muted); border-radius: 8px; color: var(--muted); font-size: 12px; line-height: 16px; }
+.session-weekdays button.is-selected { background: var(--accent); border-color: var(--accent); color: #181818; font-weight: 600; }

@@ -11,6 +11,9 @@ import AttendancePreview from '../pages/attendance/AttendancePreview'
 import MyPage from '../pages/mypage/MyPage'
 import Permissions from '../pages/admin/Permissions'
 
+import AdminLayout from '../pages/admin/AdminLayout'
+import Sessions, { SessionEditor } from '../pages/admin/Sessions'
+
 const routes = [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
   { path: '/onboarding', element: <Onboarding /> },
@@ -23,7 +26,10 @@ const routes = [
   { path: '/schedule', element: <Placeholder title="일정" /> },
   { path: '/mypage', element: <MyPage /> },
   { path: '/admin', element: <Navigate to="/admin/sessions" replace /> },
-  { path: '/admin/sessions', element: <Placeholder title="관리자 세션" /> },
+  { element: <AdminLayout />, children: [
+    { path: '/admin/sessions', element: <Sessions /> },
+    { path: '/admin/sessions/new', element: <><Sessions /><SessionEditor /></> },
+  ] },
   { path: '/admin/notices', element: <Placeholder title="관리자 공지" /> },
   { path: '/admin/schedule', element: <Placeholder title="관리자 일정" /> },
   { path: '/admin/statistics', element: <Placeholder title="관리자 통계" /> },
