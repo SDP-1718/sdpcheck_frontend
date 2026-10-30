@@ -1,9 +1,16 @@
-import { Outlet } from 'react-router'
+import { Link, NavLink, Outlet, useLocation } from 'react-router'
+import { assets } from '../../assets/common'
 
+export function Header({ title, back = '/home' }: { title: string; back?: string }) {
+  return <header className="page-header"><Link to={back} className="back-button" aria-label="뒤로"><img src={assets.back} alt="" /></Link><h1>{title}</h1></header>
+}
+export function BottomNav({ admin = false }: { admin?: boolean }) {
+  const { pathname } = useLocation()
+  const items = admin ? [ ['/home', '홈', assets.homeInactive], ['/admin/sessions', '관리', assets.adminActive], ['/mypage', '마이', assets.personInactive] ] : [ ['/home', '홈', assets.homeActive], ['/mypage', '마이페이지', assets.personInactive] ]
+  return <nav className="bottom-nav" aria-label="주 메뉴">{items.map(([to, label, icon]) => <NavLink key={to} to={to} className={() => (to.startsWith('/admin') ? pathname.startsWith('/admin') : pathname === to) ? 'active' : ''}><img src={icon} alt="" /><span>{label}</span></NavLink>)}</nav>
+}
 export default function Layout() {
-  return (
-    <div className="app-shell">
-      <main><Outlet /></main>
-    </div>
-  )
+  const { pathname } = useLocation()
+  const showNav = pathname === '/home' || pathname === '/mypage' || pathname.startsWith('/admin')
+  return <div className={`app-shell ${showNav ? 'with-nav' : ''}`}><main key={pathname}><Outlet /></main>{showNav && <BottomNav admin={pathname.startsWith('/admin')} />}</div>
 }
