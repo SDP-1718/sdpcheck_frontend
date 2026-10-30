@@ -8,6 +8,7 @@ import { Notices, NoticeDetail } from '../pages/notices/Notices'
 
 import Attendance from '../pages/attendance/Attendance'
 import AttendancePreview from '../pages/attendance/AttendancePreview'
+import MyPage from '../pages/mypage/MyPage'
 
 const routes = [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
@@ -19,7 +20,7 @@ const routes = [
   { path: '/notices', element: <Notices /> },
   { path: '/notices/:id', element: <NoticeDetail /> },
   { path: '/schedule', element: <Placeholder title="일정" /> },
-  { path: '/mypage', element: <Placeholder title="마이페이지" /> },
+  { path: '/mypage', element: <MyPage /> },
   { path: '/admin', element: <Navigate to="/admin/sessions" replace /> },
   { path: '/admin/sessions', element: <Placeholder title="관리자 세션" /> },
   { path: '/admin/notices', element: <Placeholder title="관리자 공지" /> },
