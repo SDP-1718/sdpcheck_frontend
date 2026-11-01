@@ -2,8 +2,10 @@ import { createBrowserRouter, Navigate } from 'react-router'
 import Layout from '../components/layout/Layout'
 import Placeholder from '../pages/Placeholder'
 import Onboarding from '../pages/onboarding/Onboarding'
+import { MemberInformation, RegistrationComplete } from '../pages/onboarding/MemberInformation'
 import Root from './Root'
 import Home from '../pages/home/Home'
+import SchedulePage from '../pages/schedule/SchedulePage'
 import { Notices, NoticeDetail } from '../pages/notices/Notices'
 
 import Attendance from '../pages/attendance/Attendance'
@@ -20,13 +22,15 @@ import Statistics from '../pages/admin/Statistics'
 const routes = [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
   { path: '/onboarding', element: <Onboarding /> },
-  { path: '/onboarding/preview', element: <Placeholder title="로그인" /> },
+  { path: '/onboarding/preview', element: <Navigate to="/onboarding/profile" replace /> },
+  { path: '/onboarding/profile', element: <MemberInformation /> },
+  { path: '/onboarding/complete', element: <RegistrationComplete /> },
   { path: '/home', element: <Home /> },
   { path: '/attendance', element: <Attendance /> },
   ...(import.meta.env.DEV ? [{ path: '/attendance/preview/:status', element: <AttendancePreview /> }] : []),
   { path: '/notices', element: <Notices /> },
   { path: '/notices/:id', element: <NoticeDetail /> },
-  { path: '/schedule', element: <Placeholder title="일정" /> },
+  { path: '/schedule', element: <SchedulePage /> },
   { path: '/mypage', element: <MyPage /> },
   { path: '/admin', element: <Navigate to="/admin/sessions" replace /> },
   { element: <AdminLayout />, children: [

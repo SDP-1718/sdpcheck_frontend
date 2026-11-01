@@ -1,0 +1,6 @@
+.user-schedule { min-height: 100dvh; }
+.schedule-month > h2 { min-height: 34px; padding: 5px 20px; font-size: 18px; line-height: 24px; font-weight: 400; }
+.schedule-month > ul { list-style: none; padding: 0; margin: 0; background: #fff; }
+.user-schedule .schedule-row { min-height: 80px; }
+.schedule-item-copy { min-width: 0; overflow-wrap: anywhere; }
+.schedule-empty { padding: 220px 20px 40px; color: var(--muted); font-size: 14px; line-height: 20px; text-align: center; }

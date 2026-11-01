@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react'
+import type { RegisteredMember } from '../types/registration'
 import { useLocalState } from '../hooks/useLocalState'
 import { initialAdminSessions } from '../mocks/admin'
 import { initialMembers, initialNotices, initialSchedules } from '../mocks/data'
@@ -8,7 +9,8 @@ export function usePreviewData() {
   const [schedules, setSchedules] = useLocalState('sdp-preview-schedules-v1', initialSchedules)
   const [members, setMembers] = useLocalState('sdp-preview-members-v1', initialMembers)
   const [sessions, setSessions] = useLocalState('sdp-preview-sessions-v1', initialAdminSessions)
-  return { notices, setNotices, schedules, setSchedules, members, setMembers, sessions, setSessions }
+  const [registeredMember, setRegisteredMember] = useLocalState<RegisteredMember | null>('sdp-preview-registration-v1', null)
+  return { registeredMember, setRegisteredMember, notices, setNotices, schedules, setSchedules, members, setMembers, sessions, setSessions }
 }
 export const PreviewContext = createContext<ReturnType<typeof usePreviewData> | null>(null)
 export function usePreview() {
