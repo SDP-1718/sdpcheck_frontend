@@ -1,0 +1,21 @@
+.statistics .section-label { margin: 17px 20px 12px; }
+.summary-stats { display: flex; gap: 8px; margin: 0 20px; }
+.summary-stats > div { flex: 1; min-width: 0; text-align: center; padding: 14px 5px; border-radius: 16px; background: #fff; }
+.summary-stats strong { display: block; font-size: 18px; line-height: 27px; }
+.summary-stats span { display: block; font-size: 11px; line-height: 14.3px; color: var(--muted); margin-top: 4px; }
+.statistics .chart-label { margin-top: 26px; margin-bottom: 12px; }
+.chart { height: 145px; margin: 0 20px; padding: 37px 26px 12px; display: flex; gap: 6px; align-items: flex-end; border-radius: 16px; background: #fff; }
+.chart-column { display: flex; flex: 1; min-width: 0; align-items: center; flex-direction: column; gap: 4px; font-size: 12px; line-height: 16px; color: var(--muted); }
+.chart-bar { width: 100%; background: var(--accent); border-radius: 4px 4px 0 0; }
+.members-heading { margin-top: 22px; margin-bottom: 12px; }
+.statistics-sort-trigger { display: flex; align-items: center; gap: 5px; border: 1px solid var(--disabled); border-radius: 8px; background: #fff; padding: 6px 10px; color: #181818 !important; font-size: 12px !important; line-height: 18px; }
+.member-stat-row { min-height: 81px; display: flex; align-items: center; justify-content: space-between; padding: 10px 30px 10px 20px; background: #fff; border-bottom: 1px solid var(--background); }
+.member-stat-row h3 { font-size: 16px; line-height: 24px; font-weight: 600; }
+.member-stat-row h3 span { font-size: 12px; line-height: 16px; color: var(--secondary); margin-left: 8px; font-weight: 400; }
+.member-stat-row p { font-size: 12px; line-height: 16px; color: var(--muted); margin-top: 8px; }
+.member-stat-row > strong { font-weight: 400; color: #ff2727; }
+.export-area { padding: 36px 20px; }
+.export-area .primary { min-height: 62px; }
+.statistics-sort-sheet .sheet-heading h2 { font-size: 16px; line-height: 24px; }
+.statistics-sort-option { display: flex; align-items: center; justify-content: space-between; width: 100%; height: 52px; padding: 0 10px; border-bottom: 1px solid var(--muted); color: var(--muted); font-size: 16px; line-height: 24px; text-align: left; }
+.statistics-sort-option.is-selected { color: #181818; font-weight: 600; }
