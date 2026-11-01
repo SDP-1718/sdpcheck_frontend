@@ -5,6 +5,7 @@ import Onboarding from '../pages/onboarding/Onboarding'
 import { MemberInformation, RegistrationComplete } from '../pages/onboarding/MemberInformation'
 import Root from './Root'
 import Home from '../pages/home/Home'
+import SchedulePage from '../pages/schedule/SchedulePage'
 import { Notices, NoticeDetail } from '../pages/notices/Notices'
 
 import Attendance from '../pages/attendance/Attendance'
@@ -29,7 +30,7 @@ const routes = [
   ...(import.meta.env.DEV ? [{ path: '/attendance/preview/:status', element: <AttendancePreview /> }] : []),
   { path: '/notices', element: <Notices /> },
   { path: '/notices/:id', element: <NoticeDetail /> },
-  { path: '/schedule', element: <Placeholder title="일정" /> },
+  { path: '/schedule', element: <SchedulePage /> },
   { path: '/mypage', element: <MyPage /> },
   { path: '/admin', element: <Navigate to="/admin/sessions" replace /> },
   { element: <AdminLayout />, children: [
