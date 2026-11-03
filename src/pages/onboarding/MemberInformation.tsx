@@ -4,6 +4,8 @@ import { Check, ChevronDown } from 'lucide-react'
 import { Navigate, useNavigate } from 'react-router'
 import { usePreview } from '../../app/previewStore'
 import Sheet from '../../components/common/Sheet'
+import { useMockApi } from '../../api/config'
+import { useAuth } from '../../auth/AuthState'
 import { previewRegisterMember } from '../../mocks/registration'
 import { RegistrationError } from '../../types/registration'
 import type { RegisterMember } from '../../types/registration'
@@ -20,13 +22,13 @@ export function MemberInformation({ registerMember }: { registerMember?: Registe
   const mounted = useRef(true)
   const inFlight = useRef(false)
   useEffect(() => { mounted.current = true; return () => { mounted.current = false } }, [])
-  const ready = name.trim().length > 0 && name.trim().length <= 40 && generation !== null && invitationCode.trim().length > 0
+  const ready = name.trim().length > 0 && name.trim().length <= 50 && generation !== null && invitationCode.trim().length > 0
   async function submit(event: FormEvent) {
     event.preventDefault()
     if (!ready || generation === null || inFlight.current) return
     inFlight.current = true; setSubmitting(true); setError(null)
     try {
-      const register = registerMember ?? (import.meta.env.DEV ? previewRegisterMember : undefined)
+      const register = registerMember ?? (useMockApi ? previewRegisterMember : undefined)
       if (!register) throw new RegistrationError('unavailable')
       const member = await register({ name: name.trim(), generation, invitationCode: invitationCode.trim() })
       if (!mounted.current) return
@@ -44,7 +46,7 @@ export function MemberInformation({ registerMember }: { registerMember?: Registe
     <form onSubmit={event => { void submit(event) }} aria-busy={submitting}>
       <div className="member-fields">
         <label htmlFor="member-name">이름</label>
-        <input id="member-name" autoComplete="name" maxLength={40} value={name} disabled={submitting} onChange={event => setName(event.target.value)} placeholder="이름을 입력하세요" required />
+        <input id="member-name" autoComplete="name" maxLength={50} value={name} disabled={submitting} onChange={event => setName(event.target.value)} placeholder="이름을 입력하세요" required />
         <span id="member-generation-label">기수</span>
         <button type="button" className="member-generation-trigger" aria-labelledby="member-generation-label member-generation-value" aria-haspopup="dialog" aria-expanded={generationOpen} disabled={submitting} onClick={() => setGenerationOpen(true)}>
           <span id="member-generation-value">{generation === null ? '기수를 선택하세요' : `${generation}기`}</span><ChevronDown size={16} aria-hidden="true" />
@@ -67,12 +69,14 @@ export function MemberInformation({ registerMember }: { registerMember?: Registe
 
 export function RegistrationComplete() {
   const { registeredMember } = usePreview()
+  const { session } = useAuth()
   const navigate = useNavigate()
   useEffect(() => {
     if (!registeredMember) return
     const timer = window.setTimeout(() => navigate('/home', { replace: true }), 1500)
     return () => window.clearTimeout(timer)
   }, [registeredMember, navigate])
+  if (!useMockApi && session.status !== 'authenticated') return <Navigate to="/onboarding" replace />
   if (!registeredMember) return <Navigate to="/onboarding/profile" replace />
   return <section className="registration-complete" aria-label="가입 완료"><p role="status">환영합니다!</p></section>
 }

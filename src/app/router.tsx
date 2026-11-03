@@ -1,39 +1,45 @@
 import { createBrowserRouter, Navigate } from 'react-router'
-import Layout from '../components/layout/Layout'
-import Placeholder from '../pages/Placeholder'
-import Onboarding from '../pages/onboarding/Onboarding'
-import { MemberInformation, RegistrationComplete } from '../pages/onboarding/MemberInformation'
 import Root from './Root'
+import Layout from '../components/layout/Layout'
+import Onboarding from '../pages/onboarding/Onboarding'
+import { RegistrationComplete } from '../pages/onboarding/MemberInformation'
 import Home from '../pages/home/Home'
 import SchedulePage from '../pages/schedule/SchedulePage'
-import { Notices, NoticeDetail } from '../pages/notices/Notices'
-
+import MyPage from '../pages/mypage/MyPage'
 import Attendance from '../pages/attendance/Attendance'
 import AttendancePreview from '../pages/attendance/AttendancePreview'
-import MyPage from '../pages/mypage/MyPage'
-import Permissions from '../pages/admin/Permissions'
-
+import { Notices, NoticeDetail } from '../pages/notices/Notices'
+import Placeholder from '../pages/Placeholder'
+import FeatureUnavailable from '../components/common/FeatureUnavailable'
 import AdminLayout from '../pages/admin/AdminLayout'
 import Sessions, { SessionEditor } from '../pages/admin/Sessions'
 import { AdminNotices, NoticeEditor } from '../pages/admin/AdminNotices'
 import { AdminSchedule, ScheduleEditor } from '../pages/admin/AdminSchedule'
 import Statistics from '../pages/admin/Statistics'
+import Permissions from '../pages/admin/Permissions'
 
-const routes = [
+import { useMockApi } from '../api/config'
+import { RequireSession } from '../auth/RequireSession'
+import { AuthCallback, AuthMemberInformation } from '../pages/auth/AuthCallback'
+export const router = createBrowserRouter([{ element: <Root />, children: [{ element: <Layout />, children: [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
   { path: '/onboarding', element: <Onboarding /> },
   { path: '/onboarding/preview', element: <Navigate to="/onboarding/profile" replace /> },
-  { path: '/onboarding/profile', element: <MemberInformation /> },
+  { path: '/auth/callback', element: <AuthCallback /> },
+  { path: '/onboarding/profile', element: <AuthMemberInformation /> },
   { path: '/onboarding/complete', element: <RegistrationComplete /> },
-  { path: '/home', element: <Home /> },
-  { path: '/attendance', element: <Attendance /> },
+  { element: <RequireSession />, children: [
+  { path: '/home', element: useMockApi ? <Home /> : <FeatureUnavailable title="홈" /> },
+  { path: '/attendance', element: useMockApi ? <Attendance /> : <FeatureUnavailable title="출석체크" /> },
   ...(import.meta.env.DEV ? [{ path: '/attendance/preview/:status', element: <AttendancePreview /> }] : []),
-  { path: '/notices', element: <Notices /> },
-  { path: '/notices/:id', element: <NoticeDetail /> },
-  { path: '/schedule', element: <SchedulePage /> },
-  { path: '/mypage', element: <MyPage /> },
+  { path: '/notices', element: useMockApi ? <Notices /> : <FeatureUnavailable title="공지사항" /> },
+  { path: '/notices/:id', element: useMockApi ? <NoticeDetail /> : <FeatureUnavailable title="공지사항" /> },
+  { path: '/schedule', element: useMockApi ? <SchedulePage /> : <FeatureUnavailable title="일정" /> },
+  { path: '/mypage', element: useMockApi ? <MyPage /> : <FeatureUnavailable title="마이페이지" /> },
+  { element: <RequireSession admin />, children: [
   { path: '/admin', element: <Navigate to="/admin/sessions" replace /> },
-  { element: <AdminLayout />, children: [
+  { path: '/admin/permissions', element: useMockApi ? <Permissions /> : <FeatureUnavailable title="권한 관리" /> },
+  { element: useMockApi ? <AdminLayout /> : <FeatureUnavailable title="관리" />, children: [
     { path: '/admin/sessions', element: <Sessions /> },
     { path: '/admin/sessions/new', element: <><Sessions /><SessionEditor /></> },
     { path: '/admin/notices', element: <AdminNotices /> },
@@ -44,8 +50,7 @@ const routes = [
     { path: '/admin/schedule/:id/edit', element: <><AdminSchedule /><ScheduleEditor /></> },
     { path: '/admin/statistics', element: <Statistics /> },
   ] },
-  { path: '/admin/permissions', element: <Permissions /> },
+  ] },
+  ] },
   { path: '*', element: <Placeholder title="페이지를 찾을 수 없습니다" /> },
-]
-
-export const router = createBrowserRouter([{ element: <Root />, children: [{ element: <Layout />, children: routes }] }] )
+] }] }])
