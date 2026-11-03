@@ -1,4 +1,6 @@
 import { Link, Outlet, useLocation } from 'react-router'
+import { useAuth } from '../../auth/AuthState'
+import { useMockApi } from '../../api/config'
 import { assets } from '../../assets/common'
 
 export function Header({ title, back = '/home' }: { title: string; back?: string }) {
@@ -6,7 +8,9 @@ export function Header({ title, back = '/home' }: { title: string; back?: string
 }
 export function BottomNav({ admin = false }: { admin?: boolean }) {
   const { pathname } = useLocation()
-  const items = admin ? [ ['/home', '홈', assets.homeInactive], ['/admin/sessions', '관리', assets.adminActive], ['/mypage', '마이', assets.personInactive] ] : [ ['/home', '홈', assets.homeActive], ['/mypage', '마이페이지', assets.personInactive] ]
+  const { session } = useAuth()
+  const showAdmin = useMockApi ? admin : session.status === 'authenticated' && session.member.role === 'ADMIN'
+  const items = showAdmin ? [ ['/home', '홈', assets.homeInactive], ['/admin/sessions', '관리', assets.adminActive], ['/mypage', '마이', assets.personInactive] ] : [ ['/home', '홈', assets.homeActive], ['/mypage', '마이페이지', assets.personInactive] ]
   return <nav className="bottom-nav" aria-label="주 메뉴">{items.map(([to, label, icon]) => {
     const selected = to.startsWith('/admin') ? pathname.startsWith('/admin') : pathname === to
     return <Link key={to} to={to} className={selected ? 'active' : ''} aria-current={selected ? 'page' : undefined}>
