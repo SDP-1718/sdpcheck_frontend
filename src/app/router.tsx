@@ -29,6 +29,7 @@ import LiveAttendance from '../pages/live/LiveAttendance'
 import LiveSessions, { LiveSessionEditor } from '../pages/live/admin/LiveSessions'
 import LiveAdminNotices, { LiveNoticeEditor } from '../pages/live/admin/LiveAdminNotices'
 import LiveAdminSchedule, { LiveScheduleEditor } from '../pages/live/admin/LiveAdminSchedule'
+import LivePermissions from '../pages/live/admin/LivePermissions'
 export const router = createBrowserRouter([{ element: <Root />, children: [{ element: <Layout />, children: [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
   { path: '/onboarding', element: <Onboarding /> },
@@ -46,7 +47,7 @@ export const router = createBrowserRouter([{ element: <Root />, children: [{ ele
   { path: '/mypage', element: useMockApi ? <MyPage /> : <LiveMyPage /> },
   { element: <RequireSession admin />, children: [
   { path: '/admin', element: <Navigate to="/admin/sessions" replace /> },
-  { path: '/admin/permissions', element: useMockApi ? <Permissions /> : <FeatureUnavailable title="권한 관리" /> },
+  { path: '/admin/permissions', element: useMockApi ? <Permissions /> : <LivePermissions /> },
   { element: <AdminLayout />, children: [
     { path: '/admin/sessions', element: useMockApi ? <Sessions /> : <LiveSessions /> },
     { path: '/admin/sessions/new', element: useMockApi ? <><Sessions /><SessionEditor /></> : <><LiveSessions /><LiveSessionEditor /></> },
