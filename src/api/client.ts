@@ -10,13 +10,13 @@ export function hasAccessToken() { return token !== null }
 
 async function send<T>(path: string, options: RequestInit, bearer: string | null, binary = false): Promise<T> {
   const headers = new Headers(options.headers)
-  headers.set('Accept', 'application/json')
+  headers.set('Accept', binary ? '*/*' : 'application/json')
   if (options.body && !(options.body instanceof FormData)) headers.set('Content-Type', 'application/json')
   if (bearer) headers.set('Authorization', `Bearer ${bearer}`)
   let response: Response
   try { response = await fetch(`${apiBaseUrl}${path}`, { ...options, headers, credentials: 'include' }) }
   catch (error) { if (error instanceof DOMException && error.name === 'AbortError') throw error; throw new ApiError(0, 'NETWORK_ERROR', '네트워크 연결을 확인해주세요.') }
-  if (binary && response.ok) return await response.blob() as T
+  if (binary && response.ok && !response.headers.get('Content-Type')?.includes('application/json')) return await response.blob() as T
   if (response.status === 204 && response.ok) return undefined as T
   let envelope: { isSuccess?: boolean; code?: string; message?: string; result?: T }
   try { envelope = await response.json() }

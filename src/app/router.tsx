@@ -19,7 +19,6 @@ import Statistics from '../pages/admin/Statistics'
 import Permissions from '../pages/admin/Permissions'
 
 import { useMockApi } from '../api/config'
-import FeatureUnavailable from '../components/common/FeatureUnavailable'
 import { RequireSession } from '../auth/RequireSession'
 import { AuthCallback, AuthMemberInformation } from '../pages/auth/AuthCallback'
 import LiveHome from '../pages/live/LiveHome'
@@ -29,6 +28,7 @@ import LiveAttendance from '../pages/live/LiveAttendance'
 import LiveSessions, { LiveSessionEditor } from '../pages/live/admin/LiveSessions'
 import LiveAdminNotices, { LiveNoticeEditor } from '../pages/live/admin/LiveAdminNotices'
 import LiveAdminSchedule, { LiveScheduleEditor } from '../pages/live/admin/LiveAdminSchedule'
+import LiveStatistics from '../pages/live/admin/LiveStatistics'
 import LivePermissions from '../pages/live/admin/LivePermissions'
 export const router = createBrowserRouter([{ element: <Root />, children: [{ element: <Layout />, children: [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
@@ -59,7 +59,7 @@ export const router = createBrowserRouter([{ element: <Root />, children: [{ ele
     { path: '/admin/schedule', element: useMockApi ? <AdminSchedule /> : <LiveAdminSchedule /> },
     { path: '/admin/schedule/new', element: useMockApi ? <><AdminSchedule /><ScheduleEditor /></> : <><LiveAdminSchedule /><LiveScheduleEditor /></> },
     { path: '/admin/schedule/:id/edit', element: useMockApi ? <><AdminSchedule /><ScheduleEditor /></> : <><LiveAdminSchedule /><LiveScheduleEditor /></> },
-    { path: '/admin/statistics', element: useMockApi ? <Statistics /> : <FeatureUnavailable title="출석 통계" /> },
+    { path: '/admin/statistics', element: useMockApi ? <Statistics /> : <LiveStatistics /> },
   ] },
   ] },
   ] },
