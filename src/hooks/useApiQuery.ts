@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { apiRequest } from '../api/client'
 import type { PageResponse } from '../api/types'
 export function useApiQuery<T>(path:string) {
@@ -12,7 +12,8 @@ export function useApiQuery<T>(path:string) {
   return()=>controller.abort()
  },[path,revision])
  const current=state.path===path?state:undefined
- return {data:current?.data,error:current?.error,loading:!current,retry:()=>{setState({path:''});setRevision(v=>v+1)}}
+ const retry=useCallback(()=>{setState({path:''});setRevision(v=>v+1)},[])
+ return {data:current?.data,error:current?.error,loading:!current,retry}
 }
 export function useApiPages<T>(basePath:string) {
  const [page,setPage]=useState(0),[items,setItems]=useState<T[]>([]),[revision,setRevision]=useState(0)

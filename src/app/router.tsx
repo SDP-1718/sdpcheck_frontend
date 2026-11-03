@@ -10,7 +10,7 @@ import Attendance from '../pages/attendance/Attendance'
 import AttendancePreview from '../pages/attendance/AttendancePreview'
 import { Notices, NoticeDetail } from '../pages/notices/Notices'
 import Placeholder from '../pages/Placeholder'
-import FeatureUnavailable from '../components/common/FeatureUnavailable'
+
 import AdminLayout from '../pages/admin/AdminLayout'
 import Sessions, { SessionEditor } from '../pages/admin/Sessions'
 import { AdminNotices, NoticeEditor } from '../pages/admin/AdminNotices'
@@ -19,11 +19,13 @@ import Statistics from '../pages/admin/Statistics'
 import Permissions from '../pages/admin/Permissions'
 
 import { useMockApi } from '../api/config'
+import FeatureUnavailable from '../components/common/FeatureUnavailable'
 import { RequireSession } from '../auth/RequireSession'
 import { AuthCallback, AuthMemberInformation } from '../pages/auth/AuthCallback'
 import LiveHome from '../pages/live/LiveHome'
 import LiveMyPage from '../pages/live/LiveMyPage'
 import { LiveNotices, LiveNoticeDetail, LiveSchedule } from '../pages/live/LiveContent'
+import LiveSessions, { LiveSessionEditor } from '../pages/live/admin/LiveSessions'
 export const router = createBrowserRouter([{ element: <Root />, children: [{ element: <Layout />, children: [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
   { path: '/onboarding', element: <Onboarding /> },
@@ -42,16 +44,18 @@ export const router = createBrowserRouter([{ element: <Root />, children: [{ ele
   { element: <RequireSession admin />, children: [
   { path: '/admin', element: <Navigate to="/admin/sessions" replace /> },
   { path: '/admin/permissions', element: useMockApi ? <Permissions /> : <FeatureUnavailable title="권한 관리" /> },
-  { element: useMockApi ? <AdminLayout /> : <FeatureUnavailable title="관리" />, children: [
-    { path: '/admin/sessions', element: <Sessions /> },
-    { path: '/admin/sessions/new', element: <><Sessions /><SessionEditor /></> },
-    { path: '/admin/notices', element: <AdminNotices /> },
-    { path: '/admin/notices/new', element: <><AdminNotices /><NoticeEditor /></> },
-    { path: '/admin/notices/:id/edit', element: <><AdminNotices /><NoticeEditor /></> },
-    { path: '/admin/schedule', element: <AdminSchedule /> },
-    { path: '/admin/schedule/new', element: <><AdminSchedule /><ScheduleEditor /></> },
-    { path: '/admin/schedule/:id/edit', element: <><AdminSchedule /><ScheduleEditor /></> },
-    { path: '/admin/statistics', element: <Statistics /> },
+  { element: <AdminLayout />, children: [
+    { path: '/admin/sessions', element: useMockApi ? <Sessions /> : <LiveSessions /> },
+    { path: '/admin/sessions/new', element: useMockApi ? <><Sessions /><SessionEditor /></> : <><LiveSessions /><LiveSessionEditor /></> },
+    { path: '/admin/sessions/:sessionId', element: <LiveSessions /> },
+    { path: '/admin/sessions/:sessionId/edit', element: <><LiveSessions /><LiveSessionEditor /></> },
+    { path: '/admin/notices', element: useMockApi ? <AdminNotices /> : <FeatureUnavailable title="공지 관리" /> },
+    { path: '/admin/notices/new', element: useMockApi ? <><AdminNotices /><NoticeEditor /></> : <FeatureUnavailable title="공지 관리" /> },
+    { path: '/admin/notices/:id/edit', element: useMockApi ? <><AdminNotices /><NoticeEditor /></> : <FeatureUnavailable title="공지 관리" /> },
+    { path: '/admin/schedule', element: useMockApi ? <AdminSchedule /> : <FeatureUnavailable title="일정 관리" /> },
+    { path: '/admin/schedule/new', element: useMockApi ? <><AdminSchedule /><ScheduleEditor /></> : <FeatureUnavailable title="일정 관리" /> },
+    { path: '/admin/schedule/:id/edit', element: useMockApi ? <><AdminSchedule /><ScheduleEditor /></> : <FeatureUnavailable title="일정 관리" /> },
+    { path: '/admin/statistics', element: useMockApi ? <Statistics /> : <FeatureUnavailable title="출석 통계" /> },
   ] },
   ] },
   ] },
