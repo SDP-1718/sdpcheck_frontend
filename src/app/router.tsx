@@ -27,6 +27,7 @@ import LiveMyPage from '../pages/live/LiveMyPage'
 import { LiveNotices, LiveNoticeDetail, LiveSchedule } from '../pages/live/LiveContent'
 import LiveAttendance from '../pages/live/LiveAttendance'
 import LiveSessions, { LiveSessionEditor } from '../pages/live/admin/LiveSessions'
+import LiveAdminNotices, { LiveNoticeEditor } from '../pages/live/admin/LiveAdminNotices'
 export const router = createBrowserRouter([{ element: <Root />, children: [{ element: <Layout />, children: [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
   { path: '/onboarding', element: <Onboarding /> },
@@ -50,9 +51,9 @@ export const router = createBrowserRouter([{ element: <Root />, children: [{ ele
     { path: '/admin/sessions/new', element: useMockApi ? <><Sessions /><SessionEditor /></> : <><LiveSessions /><LiveSessionEditor /></> },
     { path: '/admin/sessions/:sessionId', element: <LiveSessions /> },
     { path: '/admin/sessions/:sessionId/edit', element: <><LiveSessions /><LiveSessionEditor /></> },
-    { path: '/admin/notices', element: useMockApi ? <AdminNotices /> : <FeatureUnavailable title="공지 관리" /> },
-    { path: '/admin/notices/new', element: useMockApi ? <><AdminNotices /><NoticeEditor /></> : <FeatureUnavailable title="공지 관리" /> },
-    { path: '/admin/notices/:id/edit', element: useMockApi ? <><AdminNotices /><NoticeEditor /></> : <FeatureUnavailable title="공지 관리" /> },
+    { path: '/admin/notices', element: useMockApi ? <AdminNotices /> : <LiveAdminNotices /> },
+    { path: '/admin/notices/new', element: useMockApi ? <><AdminNotices /><NoticeEditor /></> : <><LiveAdminNotices /><LiveNoticeEditor /></> },
+    { path: '/admin/notices/:id/edit', element: useMockApi ? <><AdminNotices /><NoticeEditor /></> : <><LiveAdminNotices /><LiveNoticeEditor /></> },
     { path: '/admin/schedule', element: useMockApi ? <AdminSchedule /> : <FeatureUnavailable title="일정 관리" /> },
     { path: '/admin/schedule/new', element: useMockApi ? <><AdminSchedule /><ScheduleEditor /></> : <FeatureUnavailable title="일정 관리" /> },
     { path: '/admin/schedule/:id/edit', element: useMockApi ? <><AdminSchedule /><ScheduleEditor /></> : <FeatureUnavailable title="일정 관리" /> },
