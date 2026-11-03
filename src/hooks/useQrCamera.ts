@@ -34,9 +34,12 @@ export function useQrCamera(
     let disposed = false
     let stream: MediaStream | null = null
     let timer: number | undefined
+    let stopFallback: (() => void) | undefined
+    let submitted = false
     const video = videoRef.current
 
     function stopCamera() {
+      stopFallback?.()
       stream?.getTracks().forEach(track => track.stop())
       if (video?.srcObject === stream) video.srcObject = null
     }
@@ -56,8 +59,22 @@ export function useQrCamera(
         const formats = await Detector?.getSupportedFormats?.()
         if (disposed) { stopCamera(); return }
         if (!Detector || (formats && !formats.includes('qr_code'))) {
-          stopCamera()
-          if (!disposed) setState({ phase: 'error', reason: 'unsupported' })
+          const { BrowserQRCodeReader } = await import('@zxing/browser')
+          if (disposed) { stopCamera(); return }
+          const reader = new BrowserQRCodeReader()
+          setState({ phase: 'scanning' })
+          const controls = await reader.decodeFromVideoElement(video, (result, _error, scanControls) => {
+            if (disposed || submitted || !result?.getText().trim()) return
+            submitted = true
+            scanControls.stop()
+            stopCamera()
+            setState({ phase: 'processing' })
+            void onDecoded(result.getText()).catch(() => {
+              if (!disposed) setState({ phase: 'error', reason: 'submission' })
+            })
+          })
+          stopFallback = () => controls.stop()
+          if (disposed || submitted) stopCamera()
           return
         }
         const detector = new Detector({ formats: ['qr_code'] })

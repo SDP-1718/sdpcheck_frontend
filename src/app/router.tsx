@@ -25,6 +25,7 @@ import { AuthCallback, AuthMemberInformation } from '../pages/auth/AuthCallback'
 import LiveHome from '../pages/live/LiveHome'
 import LiveMyPage from '../pages/live/LiveMyPage'
 import { LiveNotices, LiveNoticeDetail, LiveSchedule } from '../pages/live/LiveContent'
+import LiveAttendance from '../pages/live/LiveAttendance'
 import LiveSessions, { LiveSessionEditor } from '../pages/live/admin/LiveSessions'
 export const router = createBrowserRouter([{ element: <Root />, children: [{ element: <Layout />, children: [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
@@ -35,7 +36,7 @@ export const router = createBrowserRouter([{ element: <Root />, children: [{ ele
   { path: '/onboarding/complete', element: <RegistrationComplete /> },
   { element: <RequireSession />, children: [
   { path: '/home', element: useMockApi ? <Home /> : <LiveHome /> },
-  { path: '/attendance', element: useMockApi ? <Attendance /> : <FeatureUnavailable title="출석체크" /> },
+  { path: '/attendance', element: useMockApi ? <Attendance /> : <LiveAttendance /> },
   ...(import.meta.env.DEV ? [{ path: '/attendance/preview/:status', element: <AttendancePreview /> }] : []),
   { path: '/notices', element: useMockApi ? <Notices /> : <LiveNotices /> },
   { path: '/notices/:id', element: useMockApi ? <NoticeDetail /> : <LiveNoticeDetail /> },
