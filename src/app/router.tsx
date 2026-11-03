@@ -21,6 +21,8 @@ import Permissions from '../pages/admin/Permissions'
 import { useMockApi } from '../api/config'
 import { RequireSession } from '../auth/RequireSession'
 import { AuthCallback, AuthMemberInformation } from '../pages/auth/AuthCallback'
+import LiveHome from '../pages/live/LiveHome'
+import { LiveNotices, LiveNoticeDetail, LiveSchedule } from '../pages/live/LiveContent'
 export const router = createBrowserRouter([{ element: <Root />, children: [{ element: <Layout />, children: [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
   { path: '/onboarding', element: <Onboarding /> },
@@ -29,12 +31,12 @@ export const router = createBrowserRouter([{ element: <Root />, children: [{ ele
   { path: '/onboarding/profile', element: <AuthMemberInformation /> },
   { path: '/onboarding/complete', element: <RegistrationComplete /> },
   { element: <RequireSession />, children: [
-  { path: '/home', element: useMockApi ? <Home /> : <FeatureUnavailable title="홈" /> },
+  { path: '/home', element: useMockApi ? <Home /> : <LiveHome /> },
   { path: '/attendance', element: useMockApi ? <Attendance /> : <FeatureUnavailable title="출석체크" /> },
   ...(import.meta.env.DEV ? [{ path: '/attendance/preview/:status', element: <AttendancePreview /> }] : []),
-  { path: '/notices', element: useMockApi ? <Notices /> : <FeatureUnavailable title="공지사항" /> },
-  { path: '/notices/:id', element: useMockApi ? <NoticeDetail /> : <FeatureUnavailable title="공지사항" /> },
-  { path: '/schedule', element: useMockApi ? <SchedulePage /> : <FeatureUnavailable title="일정" /> },
+  { path: '/notices', element: useMockApi ? <Notices /> : <LiveNotices /> },
+  { path: '/notices/:id', element: useMockApi ? <NoticeDetail /> : <LiveNoticeDetail /> },
+  { path: '/schedule', element: useMockApi ? <SchedulePage /> : <LiveSchedule /> },
   { path: '/mypage', element: useMockApi ? <MyPage /> : <FeatureUnavailable title="마이페이지" /> },
   { element: <RequireSession admin />, children: [
   { path: '/admin', element: <Navigate to="/admin/sessions" replace /> },
