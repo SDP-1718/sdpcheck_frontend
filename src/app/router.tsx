@@ -10,7 +10,7 @@ import Attendance from '../pages/attendance/Attendance'
 import AttendancePreview from '../pages/attendance/AttendancePreview'
 import { Notices, NoticeDetail } from '../pages/notices/Notices'
 import Placeholder from '../pages/Placeholder'
-import FeatureUnavailable from '../components/common/FeatureUnavailable'
+
 import AdminLayout from '../pages/admin/AdminLayout'
 import Sessions, { SessionEditor } from '../pages/admin/Sessions'
 import { AdminNotices, NoticeEditor } from '../pages/admin/AdminNotices'
@@ -24,6 +24,12 @@ import { AuthCallback, AuthMemberInformation } from '../pages/auth/AuthCallback'
 import LiveHome from '../pages/live/LiveHome'
 import LiveMyPage from '../pages/live/LiveMyPage'
 import { LiveNotices, LiveNoticeDetail, LiveSchedule } from '../pages/live/LiveContent'
+import LiveAttendance from '../pages/live/LiveAttendance'
+import LiveSessions, { LiveSessionEditor } from '../pages/live/admin/LiveSessions'
+import LiveAdminNotices, { LiveNoticeEditor } from '../pages/live/admin/LiveAdminNotices'
+import LiveAdminSchedule, { LiveScheduleEditor } from '../pages/live/admin/LiveAdminSchedule'
+import LiveStatistics from '../pages/live/admin/LiveStatistics'
+import LivePermissions from '../pages/live/admin/LivePermissions'
 export const router = createBrowserRouter([{ element: <Root />, children: [{ element: <Layout />, children: [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
   { path: '/onboarding', element: <Onboarding /> },
@@ -33,7 +39,7 @@ export const router = createBrowserRouter([{ element: <Root />, children: [{ ele
   { path: '/onboarding/complete', element: <RegistrationComplete /> },
   { element: <RequireSession />, children: [
   { path: '/home', element: useMockApi ? <Home /> : <LiveHome /> },
-  { path: '/attendance', element: useMockApi ? <Attendance /> : <FeatureUnavailable title="출석체크" /> },
+  { path: '/attendance', element: useMockApi ? <Attendance /> : <LiveAttendance /> },
   ...(import.meta.env.DEV ? [{ path: '/attendance/preview/:status', element: <AttendancePreview /> }] : []),
   { path: '/notices', element: useMockApi ? <Notices /> : <LiveNotices /> },
   { path: '/notices/:id', element: useMockApi ? <NoticeDetail /> : <LiveNoticeDetail /> },
@@ -41,17 +47,19 @@ export const router = createBrowserRouter([{ element: <Root />, children: [{ ele
   { path: '/mypage', element: useMockApi ? <MyPage /> : <LiveMyPage /> },
   { element: <RequireSession admin />, children: [
   { path: '/admin', element: <Navigate to="/admin/sessions" replace /> },
-  { path: '/admin/permissions', element: useMockApi ? <Permissions /> : <FeatureUnavailable title="권한 관리" /> },
-  { element: useMockApi ? <AdminLayout /> : <FeatureUnavailable title="관리" />, children: [
-    { path: '/admin/sessions', element: <Sessions /> },
-    { path: '/admin/sessions/new', element: <><Sessions /><SessionEditor /></> },
-    { path: '/admin/notices', element: <AdminNotices /> },
-    { path: '/admin/notices/new', element: <><AdminNotices /><NoticeEditor /></> },
-    { path: '/admin/notices/:id/edit', element: <><AdminNotices /><NoticeEditor /></> },
-    { path: '/admin/schedule', element: <AdminSchedule /> },
-    { path: '/admin/schedule/new', element: <><AdminSchedule /><ScheduleEditor /></> },
-    { path: '/admin/schedule/:id/edit', element: <><AdminSchedule /><ScheduleEditor /></> },
-    { path: '/admin/statistics', element: <Statistics /> },
+  { path: '/admin/permissions', element: useMockApi ? <Permissions /> : <LivePermissions /> },
+  { element: <AdminLayout />, children: [
+    { path: '/admin/sessions', element: useMockApi ? <Sessions /> : <LiveSessions /> },
+    { path: '/admin/sessions/new', element: useMockApi ? <><Sessions /><SessionEditor /></> : <><LiveSessions /><LiveSessionEditor /></> },
+    { path: '/admin/sessions/:sessionId', element: <LiveSessions /> },
+    { path: '/admin/sessions/:sessionId/edit', element: <><LiveSessions /><LiveSessionEditor /></> },
+    { path: '/admin/notices', element: useMockApi ? <AdminNotices /> : <LiveAdminNotices /> },
+    { path: '/admin/notices/new', element: useMockApi ? <><AdminNotices /><NoticeEditor /></> : <><LiveAdminNotices /><LiveNoticeEditor /></> },
+    { path: '/admin/notices/:id/edit', element: useMockApi ? <><AdminNotices /><NoticeEditor /></> : <><LiveAdminNotices /><LiveNoticeEditor /></> },
+    { path: '/admin/schedule', element: useMockApi ? <AdminSchedule /> : <LiveAdminSchedule /> },
+    { path: '/admin/schedule/new', element: useMockApi ? <><AdminSchedule /><ScheduleEditor /></> : <><LiveAdminSchedule /><LiveScheduleEditor /></> },
+    { path: '/admin/schedule/:id/edit', element: useMockApi ? <><AdminSchedule /><ScheduleEditor /></> : <><LiveAdminSchedule /><LiveScheduleEditor /></> },
+    { path: '/admin/statistics', element: useMockApi ? <Statistics /> : <LiveStatistics /> },
   ] },
   ] },
   ] },

@@ -25,14 +25,17 @@ export default function Attendance({ preview = false, submitCode }: {
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [result, setResult] = useState<AttendanceOutcome | null>(null)
+  const [submissionError,setSubmissionError] = useState('')
   const handleCode = useCallback(async (code: string) => {
     // Only a verified server response may show a real check-in result.
     if (!submitCode) throw new Error('Attendance submission is not connected')
-    const outcome = await submitCode(code)
+    let outcome: AttendanceOutcome
+    try { outcome = await submitCode(code) }
+    catch (error) { setSubmissionError(error instanceof Error ? error.message : '출석 확인을 처리하지 못했어요.'); throw error }
     setResult(outcome)
   }, [submitCode])
   const { state, retry } = useQrCamera(videoRef, handleCode, !preview && !result)
-  const message = preview ? null : cameraMessage(state)
+  const message = preview ? null : state.phase === 'error' && state.reason === 'submission' ? submissionError || cameraMessage(state) : cameraMessage(state)
 
   if (result) return <AttendanceResult result={result} />
   return (
