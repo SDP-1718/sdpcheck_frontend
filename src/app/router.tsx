@@ -22,6 +22,7 @@ import { useMockApi } from '../api/config'
 import { RequireSession } from '../auth/RequireSession'
 import { AuthCallback, AuthMemberInformation } from '../pages/auth/AuthCallback'
 import LiveHome from '../pages/live/LiveHome'
+import LiveMyPage from '../pages/live/LiveMyPage'
 import { LiveNotices, LiveNoticeDetail, LiveSchedule } from '../pages/live/LiveContent'
 export const router = createBrowserRouter([{ element: <Root />, children: [{ element: <Layout />, children: [
   { path: '/', element: <Navigate to="/onboarding" replace /> },
@@ -37,7 +38,7 @@ export const router = createBrowserRouter([{ element: <Root />, children: [{ ele
   { path: '/notices', element: useMockApi ? <Notices /> : <LiveNotices /> },
   { path: '/notices/:id', element: useMockApi ? <NoticeDetail /> : <LiveNoticeDetail /> },
   { path: '/schedule', element: useMockApi ? <SchedulePage /> : <LiveSchedule /> },
-  { path: '/mypage', element: useMockApi ? <MyPage /> : <FeatureUnavailable title="마이페이지" /> },
+  { path: '/mypage', element: useMockApi ? <MyPage /> : <LiveMyPage /> },
   { element: <RequireSession admin />, children: [
   { path: '/admin', element: <Navigate to="/admin/sessions" replace /> },
   { path: '/admin/permissions', element: useMockApi ? <Permissions /> : <FeatureUnavailable title="권한 관리" /> },
