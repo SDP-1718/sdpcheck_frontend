@@ -9,6 +9,7 @@ import type { StatisticsSummary,MemberStatisticsPage,StatisticsSort } from '../.
 import { assets } from '../../../assets/design'
 import Sheet from '../../../components/common/Sheet'
 import AsyncState from '../../../components/common/AsyncState'
+import SessionAttendanceTrend from './SessionAttendanceTrend'
 const sorts:Record<StatisticsSort,string>={ATTENDANCE_RATE_ASC:'출석률 낮은순',ATTENDANCE_RATE_DESC:'출석률 높은순',NAME_ASC:'이름순'}
 export default function LiveStatistics(){
  const [sort,setSort]=useState<StatisticsSort>('ATTENDANCE_RATE_ASC'),[sortOpen,setSortOpen]=useState(false),[page,setPage]=useState(0)
@@ -20,7 +21,7 @@ export default function LiveStatistics(){
  }
  return <section className="statistics"><h2 className="section-label">전체 통계</h2>
  {summary.error?<AsyncState error onRetry={summary.retry}/>:!summary.data?<AsyncState/>:<div className="summary-stats">{[[formatAttendanceRate(summary.data.averageAttendanceRate),'평균 출석률'],[`${summary.data.totalSessionCount}회`,'누적 세션'],[`${summary.data.activeMemberCount}/${summary.data.totalMemberCount}`,'활성 부원']].map(([value,label])=><div key={label}><strong>{value}</strong><span>{label}</span></div>)}</div>}
- <h2 className="section-label chart-label">세션별 출석 추이</h2><p className="api-inline-empty">출석 추이는 준비 중입니다.</p>
+ <h2 className="section-label chart-label">세션별 출석 추이</h2><SessionAttendanceTrend/>
  <div className="section-title members-heading"><h2>부원별 현황</h2><button className="statistics-sort-trigger" onClick={()=>setSortOpen(true)} aria-haspopup="dialog">{sorts[sort]}<ChevronDown size={10}/></button></div>
  {members.error?<AsyncState error onRetry={members.retry}/>:!members.data?<AsyncState/>:members.data.members.length?members.data.members.map(member=><div className="member-stat-row" key={member.memberId}><div><h3>{member.name}<span>{member.generation}기</span></h3><p>출석 {member.presentCount} · 지각 {member.lateCount} · 결석 {member.absentCount}</p></div><strong>{formatAttendanceRate(member.attendanceRate)}</strong></div>):<p className="api-inline-empty">표시할 부원이 없어요.</p>}
  <div className="api-pagination">{page>0&&<button className="secondary" onClick={()=>setPage(v=>v-1)}>이전</button>}{members.data?.hasNext&&<button className="secondary" onClick={()=>setPage(v=>v+1)}>다음</button>}</div>

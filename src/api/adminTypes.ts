@@ -12,3 +12,9 @@ export interface StatisticsSummary {periodCode:string;averageAttendanceRate:numb
 export type StatisticsSort='ATTENDANCE_RATE_ASC'|'ATTENDANCE_RATE_DESC'|'NAME_ASC'
 export interface MemberStatistics {memberId:number;name:string;generation:number;presentCount:number;lateCount:number;absentCount:number;totalSessionCount:number;attendanceRate:number;isAtRisk:boolean}
 export interface MemberStatisticsPage {periodCode:string;members:MemberStatistics[];page:number;size:number;hasNext:boolean}
+
+export interface AdminMember {memberId:number;name:string;generation:number;role:'MEMBER'|'ADMIN'}
+export interface AdminMemberPage {members:AdminMember[];page:number;size:number;hasNext:boolean}
+
+export interface SessionAttendanceStatistics {sessionId:string;sessionTitle:string;startsAt:string;totalCount:number;presentCount:number;lateCount:number;absentCount:number;attendanceRate:number|null}
+export interface SessionAttendanceStatisticsResponse {periodCode:string;sessions:SessionAttendanceStatistics[]}
