@@ -19,4 +19,6 @@
 .home-notices a { display: flex; align-items: center; justify-content: space-between; height: 52px; font-size: 14px; line-height: 20px; gap: 4px; }
 .home .section-title:has(+ .home-schedules) { margin-top: 15px; }
 .home-schedules { background: #fff; }
+.home-notices:has(> .api-inline-empty) { padding: 0; }
+.home-notices > .api-inline-empty, .home-schedules > .api-inline-empty { padding: 24px 20px; text-align: center; }
 @media (max-width: 360px) { .home-stats > div { padding-inline: 12px; } .home-stats span { font-size: 10px; } .home-stats strong { font-size: 22px; } .session-copy h2 { font-size: 18px; } .home-notices a { font-size: 13px; } .schedule-row { gap: 14px; } }

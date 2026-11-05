@@ -64,8 +64,8 @@ export function NoticeEditor({ generateDraft }: { generateDraft?: GenerateNotice
         {draftStatus === 'loading' ? <><LoaderCircle className="draft-spinner" size={16} aria-hidden="true" />생성 중...</> : existing || draftStatus === 'error' ? '초안 생성 다시 하기' : '초안 생성하기'}
       </button>
       {draftStatus === 'error' && <p className="form-message" role="status">지금은 초안을 만들 수 없어요. 직접 작성하거나 다시 시도해주세요.</p>}
-      <div className="editor-fields"><input aria-label="공지 제목" required value={title} onChange={event => setTitle(event.target.value)} placeholder="제목을 입력하세요" />
-        <textarea aria-label="공지 내용" required value={body} onChange={event => setBody(event.target.value)} placeholder="내용을 입력하세요" /></div>
+      <div className="editor-fields"><label className="editor-label">제목<input aria-label="공지 제목" required value={title} onChange={event => setTitle(event.target.value)} placeholder="제목을 입력하세요" /></label>
+        <label className="editor-label">내용<textarea aria-label="공지 내용" required value={body} onChange={event => setBody(event.target.value)} placeholder="내용을 입력하세요" /></label></div>
       <div className="notice-pin"><span>상단 고정</span><Toggle label="상단 고정" checked={pinned} onChange={setPinned} /></div>
       <button className="primary" disabled={!title.trim() || !body.trim() || draftStatus === 'loading'}>게시하기</button>
     </form>

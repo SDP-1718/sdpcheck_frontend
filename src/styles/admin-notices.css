@@ -3,14 +3,18 @@
 .admin-notice-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; line-height: 16px; color: var(--muted); }
 .admin-notice-meta > span { padding: 1px 4px; background: var(--accent); color: #444; border-radius: 3px; font-size: 10px; line-height: 14px; }
 .admin-notice-card h2 { margin-top: 4px; font-size: 14px; line-height: 21px; font-weight: 600; }
-.memo-label { display: block; font-size: 14px; line-height: 20px; color: var(--secondary); margin-top: 10px; }
-.memo-input { display: block; width: 100%; min-height: 120px; border: 0; padding: 0; resize: vertical; background: transparent; color: #000; font-size: 16px; line-height: 24px; }
+.memo-label { display: block; font-size: 14px; line-height: 20px; color: var(--secondary); margin: 10px 0 8px; }
+.memo-input { display: block; width: 100%; min-height: 120px; border: 1px solid var(--disabled); border-radius: 12px; padding: 12px; resize: none; background: #fff; color: #000; font-size: 16px; line-height: 24px; }
 .draft-button { min-height: 41px; margin: 8px 0; }
 .draft-button:disabled { color: #686868; cursor: not-allowed; }
 .draft-spinner { animation: draft-spin 1s linear infinite; }
-.editor-fields { border-top: 1px solid #7e7e7e; padding: 16px 10px; }
-.editor-fields input, .editor-fields textarea { display: block; width: 100%; border: 0; padding: 0; background: transparent; font-size: 16px; line-height: 24px; }
-.editor-fields textarea { min-height: 72px; resize: vertical; }
+.editor-fields { display: grid; gap: 16px; border-top: 1px solid var(--disabled); padding: 16px 0; }
+.editor-label { display: grid; gap: 8px; min-width: 0; font-size: 14px; line-height: 20px; color: var(--secondary); }
+.editor-fields input, .editor-fields textarea { display: block; width: 100%; min-width: 0; border: 1px solid var(--disabled); border-radius: 12px; padding: 12px; background: #fff; color: #000; font-size: 16px; line-height: 24px; }
+.memo-input::placeholder, .editor-fields input::placeholder, .editor-fields textarea::placeholder { color: var(--muted); }
+.editor-fields input { min-height: 50px; }
+.editor-fields textarea { min-height: 160px; resize: none; }
+.notice-sheet input[type="file"] { display: block; width: 100%; min-width: 0; max-width: 100%; font-size: 14px; }
 .notice-pin { display: flex; align-items: center; justify-content: space-between; margin: 8px 0 10px; font-size: 16px; line-height: 24px; }
 @keyframes draft-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .draft-spinner { animation: none; } }

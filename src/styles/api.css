@@ -3,6 +3,6 @@
 .api-more { width: calc(100% - 40px); margin: 20px; }
 .api-inline-empty { padding: 20px; font-size: 14px; line-height: 22px; color: var(--secondary); }
 .notice-content .notice-attachment { display: block; width: 100%; max-width: 100%; height: auto; margin-top: 24px; border-radius: 4px; }
-fieldset.profile-notifications { margin: 0; padding: 0; border: 0; min-width: 0; }
+fieldset.profile-notifications { margin: 12px 0 0; padding: 0; border: 0; min-width: 0; }
 fieldset.profile-notifications:disabled { opacity: .6; }
 .home .greeting > div { min-width: 0; overflow-wrap: anywhere; }

@@ -5,6 +5,7 @@ import { useApiPages, useApiQuery } from '../../hooks/useApiQuery'
 import { apiRequest } from '../../api/client'
 import { dateParts } from '../../api/dates'
 import { errorMessage } from '../../api/errors'
+import { formatAttendanceRate } from '../../utils/attendance'
 import type { AttendanceHistory, AttendanceSummary, NotificationSettings } from '../../api/types'
 import AsyncState from '../../components/common/AsyncState'
 import Toggle from '../../components/common/Toggle'
@@ -28,7 +29,7 @@ export default function LiveMyPage(){
  }
  return <section className="mypage"><header className="profile-header"><div className="profile-avatar">{member.name.slice(0,1)}</div><div><h1>{member.name}</h1><p>{member.generation}기 · {member.role==='ADMIN'?'운영진':'학회원'}</p></div></header>
  {insight.data&&<p className="profile-encouragement">{insight.data.insight}</p>}
- {summary.error?<AsyncState error message={errorMessage(summary.error)} onRetry={summary.retry}/>:summary.data?<div className="profile-statistics"><div><strong>{summary.data.attendanceRate}%</strong><span>평균 출석률</span></div><div><strong>{summary.data.lateCount}회</strong><span>지각</span></div><div><strong>{summary.data.absentCount}회</strong><span>결석</span></div></div>:<AsyncState/>}
+ {summary.error?<AsyncState error message={errorMessage(summary.error)} onRetry={summary.retry}/>:summary.data?<div className="profile-statistics"><div><strong>{formatAttendanceRate(summary.data.attendanceRate)}</strong><span>평균 출석률</span></div><div><strong>{summary.data.lateCount}회</strong><span>지각</span></div><div><strong>{summary.data.absentCount}회</strong><span>결석</span></div></div>:<AsyncState/>}
  <h2 className="profile-history-heading">출석 이력</h2><ul className="profile-history">{history.items.map(item=><li key={item.sessionId}><div><h3>{item.sessionTitle}</h3><time>{dateParts(item.startsAt).date.replaceAll('-','.')}</time></div><span className={`profile-attendance-status ${item.attendanceStatus==='PRESENT'?'present':item.attendanceStatus==='LATE'?'late':'absent'}`}>{labels[item.attendanceStatus]}</span></li>)}</ul>
  {history.loading&&<AsyncState/>}{history.error&&<AsyncState error onRetry={history.retry}/>} {!history.loading&&!history.error&&!history.items.length&&<p className="api-inline-empty">출석 이력이 없어요</p>}{history.hasNext&&!history.loading&&!history.error&&<button className="secondary api-more" onClick={history.loadMore}>더보기</button>}
  <h2 className="profile-notifications-heading">알림 설정</h2>{preferences.error?<AsyncState error onRetry={preferences.retry}/>:settings?<fieldset className="profile-notifications" disabled={saving}><div><span>세션 시작 알림</span><Toggle label="세션 시작 알림" checked={settings.sessionStartEnabled} onChange={value=>{void update('sessionStartEnabled',value)}}/></div><div><span>새 공지 알림</span><Toggle label="새 공지 알림" checked={settings.newNoticeEnabled} onChange={value=>{void update('newNoticeEnabled',value)}}/></div></fieldset>:<AsyncState/>}
