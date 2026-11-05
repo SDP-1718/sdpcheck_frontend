@@ -28,3 +28,7 @@
 .session-weekdays { display: flex; gap: 10px; margin-top: 10px; }
 .session-weekdays button { flex: 1; min-width: 0; height: 36px; border: 1px solid var(--muted); border-radius: 8px; color: var(--muted); font-size: 12px; line-height: 16px; }
 .session-weekdays button.is-selected { background: var(--accent); border-color: var(--accent); color: #181818; font-weight: 600; }
+
+.countdown-ring { border-radius: 50%; }
+.countdown-ring::before { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: #fff; }
+.countdown-ring strong { position: relative; }

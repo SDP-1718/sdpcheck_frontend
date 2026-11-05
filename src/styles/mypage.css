@@ -33,3 +33,5 @@
 .bottom-nav a.active img { filter: brightness(0); }
 .bottom-nav .inactive-admin-icon { opacity: .38; }
 @media (max-width: 360px) { .profile-encouragement { font-size: 14px; } }
+
+.mypage .profile-history-empty { background: #fff; padding: 24px 20px; text-align: center; }
