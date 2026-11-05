@@ -4,6 +4,7 @@ import { MapPin } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import { usePreview } from '../../app/previewStore'
 import { assets } from '../../assets/design'
+import QrCountdown from '../../components/common/QrCountdown'
 import Sheet from '../../components/common/Sheet'
 import Toggle from '../../components/common/Toggle'
 import DateTimeFields from '../../components/common/DateTimeFields'
@@ -21,7 +22,7 @@ function LiveSession({ session }: { session: AdminSession }) {
   return <>
     <section className={`qr-card ${ended ? 'session-is-ended' : ''}`} aria-label={ended ? '종료된 세션' : '진행 중인 세션'}>
       <img className="qr" src={assets.qr} alt="샘플 세션 QR 코드" />
-      <div className="countdown-row"><div className="countdown"><img src={assets.countdown} alt="" /><strong>{ended ? 0 : remaining}</strong></div><p>다음 갱신까지<strong>{ended ? 0 : remaining}초</strong></p></div>
+      <div className="countdown-row"><QrCountdown remaining={ended ? 0 : remaining}/><p>다음 갱신까지<strong>{ended ? 0 : remaining}초</strong></p></div>
       <div className="checkin-summary"><span>실시간 체크인</span><span>6<span className="muted">/17명</span></span></div>
       <progress value={6} max={17} aria-label="실시간 체크인 6명 / 17명" />
       {ended && <button className="primary ended-session-button" disabled>세션이 종료되었습니다</button>}

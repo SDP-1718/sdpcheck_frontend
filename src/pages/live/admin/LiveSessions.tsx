@@ -2,7 +2,6 @@ import { useEffect,useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link,useNavigate,useParams } from 'react-router'
 import QRCode from 'qrcode'
-import { assets } from '../../../assets/design'
 import { useApiQuery } from '../../../hooks/useApiQuery'
 import { usePollingQuery } from '../../../hooks/usePollingQuery'
 import { useAction } from '../../../hooks/useAction'
@@ -12,6 +11,7 @@ import { apiRequest } from '../../../api/client'
 import { ApiError } from '../../../api/errors'
 import { dateParts } from '../../../api/dates'
 import { shortDate,parseLocalDate,validTime } from '../../../utils/date'
+import QrCountdown from '../../../components/common/QrCountdown'
 import Sheet from '../../../components/common/Sheet'
 import DateTimeFields from '../../../components/common/DateTimeFields'
 import ConfirmDialog from '../../../components/common/ConfirmDialog'
@@ -62,7 +62,7 @@ function SessionBoard({session}:{session:SessionDetail}){
  {status==='SCHEDULED'?<section className="admin-session-card"><p>{session.title}</p><h2>{shortDate(session.sessionDate)} {session.startTime.slice(0,5)}</h2>{session.location&&<p>{session.location}</p>}<button className="primary" disabled={action.pending} onClick={()=>{void start()}}>세션 시작하기</button><button className="secondary session-settings" onClick={()=>setSettings(true)}>세션 설정</button></section>:<>
  <section className={`qr-card ${!active?'session-is-ended':''}`} aria-label={active?'진행 중인 세션':'종료된 세션'}>
  {image&&(validQr||!active)?<img className="qr generated-qr" src={image.source} alt={active?'출석체크 QR 코드':'종료된 세션 QR 코드'}/>:<div className="qr-placeholder" role="status">{active?(qrError?'QR을 불러오지 못했어요':'QR을 갱신하고 있어요'):'세션이 종료되었습니다'}</div>}
- <div className="countdown-row"><div className="countdown"><img src={assets.countdown} alt=""/><strong>{remaining}</strong></div><p>다음 갱신까지<strong>{remaining}초</strong></p></div>
+ <div className="countdown-row"><QrCountdown remaining={remaining}/><p>다음 갱신까지<strong>{remaining}초</strong></p></div>
  {qrError&&active&&<button className="secondary" onClick={()=>setQrRevision(v=>v+1)}>QR 다시 불러오기</button>}
  {live.data&&<><div className="checkin-summary"><span>실시간 체크인</span><span>{live.data.summary.checkedInCount}/{live.data.summary.totalCount}명</span></div><progress value={live.data.summary.checkedInCount} max={Math.max(1,live.data.summary.totalCount)} aria-label="실시간 체크인"/></>}
  {active?<button className="secondary session-settings" disabled={action.pending} onClick={()=>setEndOpen(true)}>세션 종료하기</button>:<button className="primary ended-session-button" disabled>세션이 종료되었습니다</button>}
