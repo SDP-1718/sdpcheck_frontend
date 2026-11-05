@@ -4,6 +4,37 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/api/:path*",
+      "destination": "https://sdpcheck.duckdns.org/api/:path*"
+    },
+    {
+      "source": "/login/oauth2/code/kakao",
+      "destination": "https://sdpcheck.duckdns.org/login/oauth2/code/kakao"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        }
+      ]
+    },
+    {
+      "source": "/login/oauth2/code/kakao",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        }
+      ]
+    }
   ]
 }
