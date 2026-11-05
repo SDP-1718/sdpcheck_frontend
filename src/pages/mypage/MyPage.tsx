@@ -35,7 +35,7 @@ export default function MyPage() {
           <span className={`profile-attendance-status ${record.status}`}>{attendanceLabels[record.status]}</span>
         </li>)}
       </ul>
-      <h2 className="profile-notifications-heading">출석 이력</h2>
+      <h2 className="profile-notifications-heading">알림 설정</h2>
       <div className="profile-notifications" role="group" aria-label="알림 설정">
         <div><span>세션 시작 알림</span><Toggle label="세션 시작 알림" checked={preferences.sessionStart}
           onChange={value => setPreferences(previous => ({ ...previous, sessionStart: value }))} /></div>
