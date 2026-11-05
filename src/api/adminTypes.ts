@@ -15,3 +15,6 @@ export interface MemberStatisticsPage {periodCode:string;members:MemberStatistic
 
 export interface AdminMember {memberId:number;name:string;generation:number;role:'MEMBER'|'ADMIN'}
 export interface AdminMemberPage {members:AdminMember[];page:number;size:number;hasNext:boolean}
+
+export interface SessionAttendanceStatistics {sessionId:string;sessionTitle:string;startsAt:string;totalCount:number;presentCount:number;lateCount:number;absentCount:number;attendanceRate:number|null}
+export interface SessionAttendanceStatisticsResponse {periodCode:string;sessions:SessionAttendanceStatistics[]}
