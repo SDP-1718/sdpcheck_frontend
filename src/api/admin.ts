@@ -11,7 +11,7 @@ export const changeSession=(id:string,action:'start'|'end')=>apiRequest<{session
 export const deleteSession=(id:string)=>apiRequest<void>(`/api/v1/admin/sessions/${encodeURIComponent(id)}`,{method:'DELETE'})
 export const updateRole=(memberId:number,role:'MEMBER'|'ADMIN')=>apiRequest<{memberId:number;name:string;generation:number;role:'MEMBER'|'ADMIN'}>(`/api/v1/admin/members/${memberId}/role`,{method:'PATCH',body:JSON.stringify({role})})
 export async function deleteSchedule(item:AdminScheduleItem){
- if(item.type!=='GENERAL'||!item.canManage)throw new ApiError(403,'FORBIDDEN','이 일정은 관리할 수 없습니다.')
+ if(item.type!=='EVENT'||!item.canManage)throw new ApiError(403,'FORBIDDEN','이 일정은 관리할 수 없습니다.')
  return apiRequest<void>(`/api/v1/admin/schedules/${encodeURIComponent(item.id)}?version=${item.version}`,{method:'DELETE'})
 }
 export function actionMessage(error:unknown){
