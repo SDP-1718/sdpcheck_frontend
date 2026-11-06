@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useApiQuery } from '../../../hooks/useApiQuery'
 import type { SessionAttendanceStatisticsResponse } from '../../../api/adminTypes'
 import { dateParts } from '../../../api/dates'
@@ -8,23 +7,13 @@ import AsyncState from '../../../components/common/AsyncState'
 
 export default function SessionAttendanceTrend(){
  const query=useApiQuery<SessionAttendanceStatisticsResponse>('/api/v1/admin/statistics/sessions')
- const [selectedId,setSelectedId]=useState<string|null>(null)
  if(query.error)return <AsyncState error message={errorMessage(query.error)} onRetry={query.retry}/>
  if(!query.data)return <AsyncState message="출석 추이를 불러오고 있어요"/>
  if(!query.data.sessions.length)return <p className="api-inline-empty">종료된 정규 세션이 없어요.</p>
- const sessions=query.data.sessions
- const selected=sessions.find(session=>session.sessionId===selectedId)??sessions[sessions.length-1]
- const selectedDate=dateParts(selected.startsAt)
- return <section className="session-trend" aria-label="세션별 출석 추이">
- <div className="chart" role="group" aria-label="세션을 선택하면 출석 현황을 확인할 수 있어요">{sessions.map(session=>{
-  const {date,time}=dateParts(session.startsAt)
-  const rate=typeof session.attendanceRate==='number'&&Number.isFinite(session.attendanceRate)?session.attendanceRate:null
-  return <button type="button" className="trend-column" key={session.sessionId} aria-pressed={selected.sessionId===session.sessionId} aria-controls="session-trend-detail" aria-label={`${session.sessionTitle} ${date} ${time}, 출석률 ${formatAttendanceRate(rate)}`} onClick={()=>setSelectedId(session.sessionId)}>
-   <span className="trend-rate">{formatAttendanceRate(rate)}</span>
-   <span className="trend-track" aria-hidden="true">{rate===null?<span className="trend-unavailable"/>:<span className="chart-bar" style={{height:`${Math.max(0,Math.min(100,rate))}%`}}/>}</span>
-   <span className="trend-date">{Number(date.slice(5,7))}/{Number(date.slice(8))}</span>
-  </button>
+ const sessions=query.data.sessions.map(session=>({...session,...dateParts(session.startsAt)}))
+ const description=sessions.map(session=>`${session.sessionTitle} ${session.date} ${session.time}, 출석률 ${formatAttendanceRate(session.attendanceRate)}`).join('; ')
+ return <div className="chart session-trend" role="img" aria-label={`세션별 출석 추이: ${description}`}>{sessions.map(session=>{
+  const rate=typeof session.attendanceRate==='number'&&Number.isFinite(session.attendanceRate)?Math.max(0,Math.min(100,session.attendanceRate)):0
+  return <div className="chart-column" key={session.sessionId} aria-hidden="true"><span className="trend-track"><span className="chart-bar" style={{height:`${rate}%`}}/></span><span>{Number(session.date.slice(5,7))}/{Number(session.date.slice(8))}</span></div>
  })}</div>
- <div className="trend-detail" id="session-trend-detail" aria-live="polite" aria-atomic="true"><h3>{selected.sessionTitle}</h3><p>{selectedDate.date.replaceAll('-','.')} · {selectedDate.time}</p><dl><div><dt>대상</dt><dd>{selected.totalCount}명</dd></div><div><dt>출석</dt><dd>{selected.presentCount}명</dd></div><div><dt>지각</dt><dd>{selected.lateCount}명</dd></div><div><dt>결석</dt><dd>{selected.absentCount}명</dd></div></dl></div>
- </section>
 }
