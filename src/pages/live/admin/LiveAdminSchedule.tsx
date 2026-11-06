@@ -27,7 +27,7 @@ export default function LiveAdminSchedule(){
 async function findSchedule(id:string,signal?:AbortSignal){
  let page=1
  while(true){
-  const result=await apiRequest<AdminScheduleList>(`/api/v1/admin/schedules?type=GENERAL&page=${page}&size=100`,{signal})
+  const result=await apiRequest<AdminScheduleList>(`/api/v1/admin/schedules?type=EVENT&page=${page}&size=100`,{signal})
   const item=result.items.find(candidate=>candidate.id===id)
   if(item)return item
   if(page>=result.page.totalPages)return null
@@ -55,7 +55,7 @@ function useScheduleLoad(id:string,attempt:number,setState:(state:{id:string;ite
 function ScheduleForm({existing}:{existing?:AdminScheduleItem}){
  const initial=existing?dateParts(existing.startsAt):{date:'',time:''},navigate=useNavigate(),action=useAction()
  const [title,setTitle]=useState(existing?.title??''),[date,setDate]=useState(initial.date),[time,setTime]=useState(initial.time),[place,setPlace]=useState(existing?.location??'')
- const allowed=!existing||(existing.type==='GENERAL'&&existing.canManage)
+ const allowed=!existing||(existing.type==='EVENT'&&existing.canManage)
  const valid=!!title.trim()&&!!parseLocalDate(date)&&validTime(time)&&allowed
  async function submit(event:FormEvent){
   event.preventDefault();if(!valid)return

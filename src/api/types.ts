@@ -1,7 +1,7 @@
 export interface AccessTokenResponse { accessToken: string; onboardingCompleted: boolean; name: string | null; generation: number | null }
 export interface MyInfo { name: string; generation: number; role: 'MEMBER' | 'ADMIN' }
 export interface PageResponse<T> { items: T[]; page: number; size: number; totalElements: number; totalPages: number; hasNext: boolean }
-export interface ScheduleSummary { id: string; type: 'SESSION' | 'GENERAL'; title: string; startsAt: string; location: string | null }
+export interface ScheduleSummary { id: string; type: 'SESSION' | 'EVENT'; title: string; startsAt: string; location: string | null }
 export interface NoticeSummary { id: string; title: string; isPinned: boolean; author: { id: string; name: string }; createdAt: string; updatedAt: string }
 export interface NoticeDetailResponse extends NoticeSummary { content: string; imageUrls: string[] }
 export interface AttendanceSummary { periodCode: string; attendanceRate: number | null; presentCount: number; lateCount: number; absentCount: number; totalSessionCount: number }
