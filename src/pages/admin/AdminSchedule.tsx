@@ -48,7 +48,8 @@ export function ScheduleEditor() {
   if (id && !existing) return <Sheet title="새 일정 등록" onClose={() => navigate('/admin/schedule')}><p className="form-message">일정을 찾을 수 없어요.</p></Sheet>
   return <Sheet title="새 일정 등록" onClose={() => navigate('/admin/schedule')} className="admin-form-sheet schedule-sheet">
     <form onSubmit={submit}>
-      <input aria-label="일정명" className="editor-inline-title" required value={title} onChange={event => setTitle(event.target.value)} placeholder="일정명" />
+      <label className="admin-form-label first-label" htmlFor="event-title">일정명</label>
+      <input id="event-title" className="admin-input" required value={title} onChange={event => setTitle(event.target.value)} placeholder="일정명을 입력하세요" />
       <DateTimeFields date={date} time={time} onDateChange={setDate} onTimeChange={setTime} />
       <label className="admin-form-label" htmlFor="event-location">장소(선택)</label>
       <input className="admin-input" id="event-location" value={location} onChange={event => setLocation(event.target.value)} placeholder="장소를 입력하세요 (선택)" />

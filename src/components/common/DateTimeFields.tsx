@@ -34,7 +34,7 @@ function DatePicker({ value, onSelect, onClose }: { value: string; onSelect: (va
 }
 
 function TimePicker({ value, onSelect, onClose }: { value: string; onSelect: (value: string) => void; onClose: () => void }) {
-  const initial = validTime(value) ? value.split(':').map(Number) : [19, 10]
+  const initial = validTime(value) ? value.split(':').map(Number) : [19, 0]
   const [hour, setHour] = useState(initial[0])
   const [minute, setMinute] = useState(initial[1])
   const wrap = (value: number, max: number) => (value + max) % max
