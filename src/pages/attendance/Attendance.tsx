@@ -1,7 +1,8 @@
 import { useCallback, useRef, useState } from 'react'
-import { Clock3 } from 'lucide-react'
+import { Clock3, SwitchCamera } from 'lucide-react'
 import { Link } from 'react-router'
 import { useQrCamera } from '../../hooks/useQrCamera'
+import { usePinchZoom } from '../../hooks/usePinchZoom'
 import type { QrCameraState } from '../../hooks/useQrCamera'
 import type { AttendanceOutcome, SubmitAttendanceCode } from '../../types/attendance'
 import AttendanceResult from './AttendanceResult'
@@ -24,6 +25,7 @@ export default function Attendance({ preview = false, submitCode }: {
   submitCode?: SubmitAttendanceCode
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const pinch = usePinchZoom()
   const [result, setResult] = useState<AttendanceOutcome | null>(null)
   const [submissionError,setSubmissionError] = useState('')
   const handleCode = useCallback(async (code: string) => {
@@ -34,7 +36,7 @@ export default function Attendance({ preview = false, submitCode }: {
     catch (error) { setSubmissionError(error instanceof Error ? error.message : '출석 확인을 처리하지 못했어요.'); throw error }
     setResult(outcome)
   }, [submitCode])
-  const { state, retry } = useQrCamera(videoRef, handleCode, !preview && !result)
+  const { state, retry, switchCamera, canSwitch } = useQrCamera(videoRef, handleCode, !preview && !result, pinch.zoom)
   const message = preview ? null : state.phase === 'error' && state.reason === 'submission' ? submissionError || cameraMessage(state) : cameraMessage(state)
 
   if (result) return <AttendanceResult result={result} />
@@ -44,8 +46,9 @@ export default function Attendance({ preview = false, submitCode }: {
         <h1 id="attendance-scan-title">출석체크</h1>
         <p>QR코드를 스캔해주세요</p>
       </header>
-      <div className={`attendance-viewfinder ${state.phase === 'scanning' && !preview ? 'is-scanning' : ''}`} aria-label="QR 코드 촬영 영역">
-        <video ref={videoRef} autoPlay muted playsInline aria-label="카메라 미리보기" />
+      <div className={`attendance-viewfinder ${state.phase === 'scanning' && !preview ? 'is-scanning' : ''}`} aria-label="QR 코드 촬영 영역. 두 손가락으로 확대하거나 축소할 수 있어요." tabIndex={!preview && state.phase === 'scanning' ? 0 : undefined} {...(!preview && state.phase === 'scanning' ? pinch.handlers : {})}>
+        <video ref={videoRef} style={{transform:`scale(${pinch.zoom})`}} autoPlay muted playsInline aria-label="카메라 미리보기" />
+        {!preview && state.phase === 'scanning' && <span className="attendance-zoom-label" aria-label={`확대 배율 ${pinch.zoom.toFixed(1)}배`}>{pinch.zoom.toFixed(1)}×</span>}
         <div className="attendance-scan-line" aria-hidden="true" />
         {(preview || state.phase !== 'scanning') && <Clock3 className="attendance-camera-clock" size={40} strokeWidth={1.5} aria-hidden="true" />}
         <span className="scan-corner top-left" aria-hidden="true" />
@@ -53,9 +56,10 @@ export default function Attendance({ preview = false, submitCode }: {
         <span className="scan-corner bottom-left" aria-hidden="true" />
         <span className="scan-corner bottom-right" aria-hidden="true" />
       </div>
+      {!preview && canSwitch && state.phase !== 'processing' && <button type="button" className="attendance-camera-switch" disabled={state.phase === 'loading'} onClick={()=>{pinch.reset();switchCamera()}}><SwitchCamera size={20} aria-hidden="true"/>카메라 전환</button>}
       {message && <div className="attendance-camera-message" role="status">
         <p>{message}</p>
-        {state.phase === 'error' && <button type="button" onClick={retry}>다시 시도</button>}
+        {state.phase === 'error' && <button type="button" onClick={()=>{pinch.reset();retry()}}>다시 시도</button>}
       </div>}
       <Link className="attendance-bottom attendance-cancel" to="/home">취소</Link>
     </section>

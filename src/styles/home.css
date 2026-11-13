@@ -1,4 +1,4 @@
-.greeting { padding: 66px 20px 18px; display: flex; justify-content: space-between; align-items: center; }
+.greeting { padding: 20px 20px 18px; display: flex; justify-content: space-between; align-items: center; }
 .greeting p, .admin-header p { font-size: 14px; line-height: 20px; }
 .greeting h1, .admin-header h1 { font-size: 24px; line-height: 32px; font-weight: 400; margin-top: 2px; }
 .avatar { display: grid; place-items: center; width: 44px; height: 44px; background: var(--accent); border-radius: 50%; font-size: 16px; font-weight: 600; }

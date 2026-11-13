@@ -1,11 +1,12 @@
 import { useCallback, useState } from 'react'
 import type { FormEvent } from 'react'
-import { MapPin } from 'lucide-react'
+import { MapPin, MoreHorizontal } from 'lucide-react'
 import { useNavigate } from 'react-router'
 import { usePreview } from '../../app/previewStore'
 import { assets } from '../../assets/design'
 import QrCountdown from '../../components/common/QrCountdown'
 import Sheet from '../../components/common/Sheet'
+import ConfirmDialog from '../../components/common/ConfirmDialog'
 import Toggle from '../../components/common/Toggle'
 import DateTimeFields from '../../components/common/DateTimeFields'
 import { useSessionClock } from '../../hooks/useSessionClock'
@@ -34,12 +35,14 @@ function LiveSession({ session }: { session: AdminSession }) {
 
 export default function Sessions() {
   const { sessions, setSessions } = usePreview()
+  const [deleteId,setDeleteId]=useState<string|null>(null)
   if (!sessions.length) return <p className="admin-empty" role="status">등록된 세션이 없어요</p>
-  return <div>{sessions.map(session => session.phase === 'ready' ? <section className="admin-session-card" key={session.id}>
+  return <div>{sessions.map(session => session.phase === 'ready' ? <section className="admin-session-card session-list-card" key={session.id}>
+    <button type="button" className="icon-button session-delete-menu" aria-label={`${session.title} 삭제 메뉴`} aria-haspopup="dialog" onClick={()=>setDeleteId(session.id)}><MoreHorizontal size={22} aria-hidden="true"/></button>
     <div className="session-card-heading"><p>{session.title}</p>{session.location && <span><MapPin size={12} aria-hidden="true" />{session.location}</span>}</div>
     <h2>{shortDate(session.date)} {session.time}</h2>
     <button type="button" className="primary" onClick={() => setSessions(previous => previous.map(item => item.id === session.id ? { ...item, phase: 'active', endsAt: Date.now() + 57_000 } : item))}>세션 시작하기</button>
-  </section> : <LiveSession key={session.id} session={session} />)}</div>
+  </section> : <LiveSession key={session.id} session={session} />)}{deleteId&&<ConfirmDialog title="세션을 삭제할까요?" confirmLabel="삭제" onCancel={()=>setDeleteId(null)} onConfirm={()=>{setSessions(previous=>previous.filter(session=>session.id!==deleteId));setDeleteId(null)}}>삭제한 세션은 되돌릴 수 없어요.</ConfirmDialog>}</div>
 }
 
 export function SessionEditor() {
