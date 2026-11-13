@@ -3,6 +3,7 @@ import { apiBaseUrl } from './config'
 import { ApiError } from './errors'
 import type { AccessTokenResponse, MyInfo } from './types'
 import type { MemberRegistration } from '../types/registration'
+import { disablePush } from '../notifications/push'
 let issuing: Promise<AccessTokenResponse> | null = null
 export const kakaoLoginUrl = `${apiBaseUrl}/api/v1/auth/kakao/login`
 export function issueAccessToken() {
@@ -24,6 +25,7 @@ export async function completeOnboarding(input: MemberRegistration) {
  return issueAccessToken()
 }
 export async function logout() {
+ try { await disablePush() } catch { /* Notification cleanup must not block logout. */ }
  clearAccessToken()
  await apiRequest<void>('/api/v1/auth/logout',{method:'POST'},false)
 }
