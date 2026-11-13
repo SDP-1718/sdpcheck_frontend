@@ -2,11 +2,12 @@ import { useEffect,useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link,useNavigate,useParams } from 'react-router'
 import QRCode from 'qrcode'
+import { MoreHorizontal } from 'lucide-react'
 import { useApiQuery } from '../../../hooks/useApiQuery'
 import { usePollingQuery } from '../../../hooks/usePollingQuery'
 import { useAction } from '../../../hooks/useAction'
-import { createSession,updateSession,changeSession,deleteSession,getQr } from '../../../api/admin'
-import type { AdminScheduleList,SessionDetail,SessionCheckIns,SessionQr } from '../../../api/adminTypes'
+import { createSession,updateSession,changeSession,deleteSession,getQr,getSession } from '../../../api/admin'
+import type { AdminScheduleItem,AdminScheduleList,SessionDetail,SessionCheckIns,SessionQr } from '../../../api/adminTypes'
 import { apiRequest } from '../../../api/client'
 import { ApiError } from '../../../api/errors'
 import { dateParts } from '../../../api/dates'
@@ -90,12 +91,28 @@ export default function LiveSessions(){
  return sessionId?<SessionDetails id={sessionId}/>:<SessionList/>
 }
 function SessionList(){
- const [page,setPage]=useState(1)
+ const [page,setPage]=useState(1),[deleteTarget,setDeleteTarget]=useState<AdminScheduleItem|null>(null),[deleteBlocked,setDeleteBlocked]=useState(false)
+ const action=useAction()
+ async function requestDelete(item:AdminScheduleItem){
+  const result=await action.run(()=>getSession(item.id))
+  if(!result.ok)return
+  if(result.value.status!=='SCHEDULED'){setDeleteBlocked(true);return}
+  setDeleteTarget(item)
+ }
  const query=useApiQuery<AdminScheduleList>(`/api/v1/admin/schedules?type=SESSION&page=${page}&size=20`)
  if(query.error)return <AsyncState error onRetry={query.retry}/>
  if(!query.data)return <AsyncState/>
- return <>{query.data.items.length?query.data.items.map(item=><section className="admin-session-card" key={item.id}><p>{item.title}</p><h2>{dateParts(item.startsAt).date} {dateParts(item.startsAt).time}</h2><Link className="primary" to={`/admin/sessions/${item.id}`}>세션 보기</Link></section>):<p className="admin-empty" role="status">등록된 세션이 없어요</p>}
- <div className="api-pagination">{page>1&&<button className="secondary" onClick={()=>setPage(v=>v-1)}>이전</button>}{page<query.data.page.totalPages&&<button className="secondary" onClick={()=>setPage(v=>v+1)}>다음</button>}</div></>
+ return <>{query.data.items.length?query.data.items.map(item=><section className="admin-session-card session-list-card" key={item.id}><button type="button" className="icon-button session-delete-menu" aria-label={`${item.title} 삭제 메뉴`} aria-haspopup="dialog" disabled={action.pending} onClick={()=>{void requestDelete(item)}}><MoreHorizontal size={22} aria-hidden="true"/></button><p>{item.title}</p><h2>{dateParts(item.startsAt).date} {dateParts(item.startsAt).time}</h2><Link className="primary" to={`/admin/sessions/${item.id}`}>세션 보기</Link></section>):<p className="admin-empty" role="status">등록된 세션이 없어요</p>}
+ <div className="api-pagination">{page>1&&<button className="secondary" onClick={()=>setPage(v=>v-1)}>이전</button>}{page<query.data.page.totalPages&&<button className="secondary" onClick={()=>setPage(v=>v+1)}>다음</button>}</div>
+ {action.error&&<p className="api-inline-empty" role="alert">{action.error}</p>}
+ {deleteBlocked&&<Sheet title="세션 삭제 안내" onClose={()=>setDeleteBlocked(false)}><p className="confirmation-copy">시작 전 예약 세션만 삭제할 수 있어요. 진행 중이거나 종료된 세션은 삭제할 수 없습니다.</p><button type="button" className="secondary" onClick={()=>setDeleteBlocked(false)}>확인</button></Sheet>}
+ {deleteTarget&&<ConfirmDialog title="세션을 삭제할까요?" confirmLabel="삭제" onCancel={()=>setDeleteTarget(null)} onConfirm={()=>{
+  const item=deleteTarget;setDeleteTarget(null)
+  void action.run(()=>deleteSession(item.id)).then(result=>{
+   if(result.ok){if(query.data?.items.length===1&&page>1)setPage(value=>value-1);else query.retry()}
+  })
+ }}>{deleteTarget.title} 세션을 삭제합니다. 삭제한 세션은 되돌릴 수 없어요.</ConfirmDialog>}
+ </>
 }
 export function LiveSessionEditor(){
  const {sessionId}=useParams()
