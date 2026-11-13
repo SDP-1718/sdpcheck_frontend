@@ -1,5 +1,5 @@
-.admin-page { position: relative; min-height: calc(100dvh - 56px); }
-.admin-header { height: 120px; padding: 66px 20px 0; display: flex; justify-content: space-between; align-items: center; }
+.admin-page { position: relative; min-height: calc(100dvh - var(--bottom-nav-height)); }
+.admin-header { height: 74px; padding: 20px 20px 0; display: flex; justify-content: space-between; align-items: center; }
 .admin-header p { font-size: 14px; line-height: 20px; color: var(--muted); }
 .admin-header h1 { margin-top: 2px; font-size: 24px; line-height: 32px; font-weight: 400; }
 .add-button { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 8px 12px; min-width: 98px; background: var(--accent); border-radius: 8px; font-size: 12px; line-height: 16px; font-weight: 700; }

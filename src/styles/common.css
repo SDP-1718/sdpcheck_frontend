@@ -1,5 +1,5 @@
 @font-face { font-family: Pretendard; src: url('/fonts/PretendardVariable.woff2') format('woff2'); font-weight: 45 920; font-display: swap; }
-:root { font-family: Pretendard, 'Malgun Gothic', sans-serif; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; color: #000; background: #e8e9eb; --surface: #fff; --background: #f3f4f6; --accent: #e8f8a8; --muted: #a0a0a0; --secondary: #686868; --disabled: #e1e2e2; }
+:root { font-family: Pretendard, 'Malgun Gothic', sans-serif; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; color: #000; background: #e8e9eb; --surface: #fff; --background: #f3f4f6; --accent: #e8f8a8; --muted: #a0a0a0; --secondary: #686868; --disabled: #e1e2e2; --bottom-nav-height: calc(72px + env(safe-area-inset-bottom, 0px)); }
 * { box-sizing: border-box; }
 @media (min-width: 480px) { html { overflow-y: scroll; } }
 body { margin: 0; min-width: 320px; }
@@ -13,19 +13,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 h1, h2, h3, p { margin: 0; }
 img { display: block; flex-shrink: 0; max-width: none; }
 .app-shell { width: min(100%, 402px); min-height: 100dvh; margin-inline: auto; background: var(--background); position: relative; overflow: clip; }
-.app-shell.with-nav { padding-bottom: calc(56px + env(safe-area-inset-bottom)); }
+.app-shell.with-nav { padding-bottom: var(--bottom-nav-height); }
 .muted { color: var(--muted); }
 .primary, .secondary { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 56px; border-radius: 15px; font-size: 16px; line-height: 24px; gap: 10px; }
 .primary { background: var(--accent); }
 .primary:disabled { background: var(--disabled); }
 .secondary { border: 1px solid var(--muted); background: #fff; }
 .icon-button { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 4px; }
-.bottom-nav { position: fixed; z-index: 10; bottom: 0; left: 50%; transform: translateX(-50%); width: min(100%, 402px); height: calc(56px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom); background: #fff; box-shadow: 0 -2px 5px #0000000d; display: flex; }
-.bottom-nav a { flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 3px; color: var(--muted); font-size: 11px; line-height: 16.5px; }
+.bottom-nav { position: fixed; z-index: 10; bottom: 0; left: 50%; transform: translateX(-50%); width: min(100%, 402px); height: var(--bottom-nav-height); padding-top: 0; padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: #fff; box-shadow: 0 -2px 5px #0000000d; display: flex; }
+.bottom-nav a { min-height: 56px; flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 3px; color: var(--muted); font-size: 11px; line-height: 16.5px; }
 .bottom-nav a.active { color: #000; font-weight: 600; }
-.page-header { height: 112px; padding: 58px 20px 18px; display: flex; align-items: center; justify-content: center; position: relative; }
+.page-header { height: 64px; padding: 0 20px; display: flex; align-items: center; justify-content: center; position: relative; }
 .page-header h1 { font-size: 20px; font-weight: 400; line-height: 28px; }
-.back-button { position: absolute; left: 10px; bottom: 16px; display: flex; width: 44px; height: 36px; align-items: center; justify-content: center; }
+.back-button { position: absolute; left: 10px; bottom: 14px; display: flex; width: 44px; height: 36px; align-items: center; justify-content: center; }
 .back-button img { transform: scaleX(-1); }
 .section-title { display: flex; align-items: center; justify-content: space-between; margin: 21px 20px 10px; min-height: 24px; }
 .section-title h2, .section-label { font-size: 16px; line-height: 24px; font-weight: 400; }
@@ -42,6 +42,7 @@ img { display: block; flex-shrink: 0; max-width: none; }
 .sheet-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; min-height: 32px; }
 .sheet-heading h2 { font-size: 20px; line-height: 28px; font-weight: 400; }
 .close-button { color: var(--muted); font-size: 30px; line-height: 24px; font-weight: 300; margin-right: -4px; }
+.close-button:focus-visible { outline: none; }
 textarea::placeholder, input::placeholder { color: inherit; opacity: 1; }
 .form-message { font-size: 12px; line-height: 18px; color: var(--secondary); padding-block: 5px; }
 .field-label { display: block; font-size: 16px; line-height: 24px; margin: 26px 0 10px; }
