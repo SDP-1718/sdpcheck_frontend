@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { openQrCamera } from '../utils/qrCamera'
+import type { QrCameraDevice } from '../utils/qrCamera'
 import type { RefObject } from 'react'
 
 interface DetectedCode { rawValue: string }
@@ -28,6 +30,9 @@ export function useQrCamera(
 ) {
   const [state, setState] = useState<QrCameraState>({ phase: 'loading' })
   const [attempt, setAttempt] = useState(0)
+  const [requestedId, setRequestedId] = useState<string | null>(null)
+  const [cameraInfo, setCameraInfo] = useState<{ devices: QrCameraDevice[]; activeId: string }>({devices:[], activeId:''})
+  const startup = useRef<Promise<void>>(Promise.resolve())
 
   useEffect(() => {
     if (!enabled) return
@@ -46,10 +51,11 @@ export function useQrCamera(
 
     async function start() {
       try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          audio: false,
-          video: { facingMode: { ideal: 'environment' } },
-        })
+        if (disposed) return
+        const camera = await openQrCamera(requestedId, () => disposed)
+        if (!camera) return
+        stream = camera.stream
+        if (!disposed) setCameraInfo({devices:camera.devices, activeId:camera.activeId})
         if (disposed || !video) { stopCamera(); return }
         video.srcObject = stream
         await video.play()
@@ -110,7 +116,7 @@ export function useQrCamera(
       }
     }
 
-    if (navigator.mediaDevices?.getUserMedia) void start()
+    if (navigator.mediaDevices?.getUserMedia) startup.current = startup.current.catch(() => {}).then(start)
     else {
       // Keep the update asynchronous, just like a rejected permission request.
       void Promise.resolve().then(() => {
@@ -122,11 +128,19 @@ export function useQrCamera(
       if (timer !== undefined) window.clearTimeout(timer)
       stopCamera()
     }
-  }, [attempt, enabled, onDecoded, videoRef])
+  }, [attempt, enabled, onDecoded, videoRef, requestedId])
 
   function retry() {
     setState({ phase: 'loading' })
     setAttempt(previous => previous + 1)
   }
-  return { state, retry }
+  function switchCamera() {
+    if (cameraInfo.devices.length < 2 || state.phase === 'loading' || state.phase === 'processing') return
+    const current = cameraInfo.devices.findIndex(device => device.deviceId === cameraInfo.activeId)
+    const next = cameraInfo.devices[(current + 1) % cameraInfo.devices.length]
+    setState({phase:'loading'})
+    setRequestedId(next.deviceId)
+    setAttempt(previous => previous + 1)
+  }
+  return { state, retry, switchCamera, canSwitch:cameraInfo.devices.length > 1 }
 }

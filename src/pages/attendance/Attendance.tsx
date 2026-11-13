@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
-import { Clock3 } from 'lucide-react'
+import { Clock3, SwitchCamera } from 'lucide-react'
 import { Link } from 'react-router'
 import { useQrCamera } from '../../hooks/useQrCamera'
 import type { QrCameraState } from '../../hooks/useQrCamera'
@@ -34,7 +34,7 @@ export default function Attendance({ preview = false, submitCode }: {
     catch (error) { setSubmissionError(error instanceof Error ? error.message : '출석 확인을 처리하지 못했어요.'); throw error }
     setResult(outcome)
   }, [submitCode])
-  const { state, retry } = useQrCamera(videoRef, handleCode, !preview && !result)
+  const { state, retry, switchCamera, canSwitch } = useQrCamera(videoRef, handleCode, !preview && !result)
   const message = preview ? null : state.phase === 'error' && state.reason === 'submission' ? submissionError || cameraMessage(state) : cameraMessage(state)
 
   if (result) return <AttendanceResult result={result} />
@@ -53,6 +53,7 @@ export default function Attendance({ preview = false, submitCode }: {
         <span className="scan-corner bottom-left" aria-hidden="true" />
         <span className="scan-corner bottom-right" aria-hidden="true" />
       </div>
+      {!preview && canSwitch && state.phase !== 'processing' && <button type="button" className="attendance-camera-switch" disabled={state.phase === 'loading'} onClick={switchCamera}><SwitchCamera size={20} aria-hidden="true"/>카메라 전환</button>}
       {message && <div className="attendance-camera-message" role="status">
         <p>{message}</p>
         {state.phase === 'error' && <button type="button" onClick={retry}>다시 시도</button>}

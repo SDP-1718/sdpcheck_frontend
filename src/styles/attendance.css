@@ -46,3 +46,7 @@
   .attendance-camera-message button { margin-top: 4px; padding: 4px 10px; font-size: 12px; }
   .attendance-bottom { bottom: max(20px, env(safe-area-inset-bottom)); }
 }
+
+.attendance-camera-switch { position: absolute; top: 66px; right: 20px; display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 12px; border: 1px solid #999; border-radius: 12px; background: #fff; font-size: 13px; line-height: 20px; }
+.attendance-camera-switch:disabled { opacity: .6; }
+@media (max-height: 600px) { .attendance-camera-switch { top: 36px; } }
