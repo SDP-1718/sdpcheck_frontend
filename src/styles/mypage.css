@@ -35,3 +35,12 @@
 @media (max-width: 360px) { .profile-encouragement { font-size: 14px; } }
 
 .mypage .profile-history-empty { background: #fff; padding: 24px 20px; text-align: center; }
+
+.push-device-settings { margin-top: 12px; padding: 16px 20px; background: #fff; }
+.push-device-settings p { color: var(--secondary); font-size: 13px; line-height: 20px; }
+.push-device-settings button { width: 100%; margin-top: 12px; min-height: 42px; font-size: 14px; }
+.push-device-settings [role="alert"] { margin-top: 10px; }
+.push-message { position: fixed; z-index: 110; top: max(12px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); width: min(390px, calc(100% - 24px)); display: flex; align-items: flex-start; gap: 8px; padding: 16px; background: #fff; border: 1px solid var(--disabled); border-radius: 16px; box-shadow: 0 4px 20px #0002; }
+.push-message-content { flex: 1; min-width: 0; text-align: left; }
+.push-message strong { display: block; font-size: 14px; line-height: 21px; }
+.push-message span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: var(--secondary); font-size: 13px; line-height: 20px; margin-top: 4px; }
