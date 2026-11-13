@@ -96,7 +96,7 @@ function SessionList(){
  async function requestDelete(item:AdminScheduleItem){
   const result=await action.run(()=>getSession(item.id))
   if(!result.ok)return
-  if(result.value.status!=='SCHEDULED'){setDeleteBlocked(true);return}
+  if(result.value.status==='IN_PROGRESS'){setDeleteBlocked(true);return}
   setDeleteTarget(item)
  }
  const query=useApiQuery<AdminScheduleList>(`/api/v1/admin/schedules?type=SESSION&page=${page}&size=20`)
@@ -105,7 +105,7 @@ function SessionList(){
  return <>{query.data.items.length?query.data.items.map(item=><section className="admin-session-card session-list-card" key={item.id}><button type="button" className="icon-button session-delete-menu" aria-label={`${item.title} 삭제 메뉴`} aria-haspopup="dialog" disabled={action.pending} onClick={()=>{void requestDelete(item)}}><MoreHorizontal size={22} aria-hidden="true"/></button><p>{item.title}</p><h2>{dateParts(item.startsAt).date} {dateParts(item.startsAt).time}</h2><Link className="primary" to={`/admin/sessions/${item.id}`}>세션 보기</Link></section>):<p className="admin-empty" role="status">등록된 세션이 없어요</p>}
  <div className="api-pagination">{page>1&&<button className="secondary" onClick={()=>setPage(v=>v-1)}>이전</button>}{page<query.data.page.totalPages&&<button className="secondary" onClick={()=>setPage(v=>v+1)}>다음</button>}</div>
  {action.error&&<p className="api-inline-empty" role="alert">{action.error}</p>}
- {deleteBlocked&&<Sheet title="세션 삭제 안내" onClose={()=>setDeleteBlocked(false)}><p className="confirmation-copy">시작 전 예약 세션만 삭제할 수 있어요. 진행 중이거나 종료된 세션은 삭제할 수 없습니다.</p><button type="button" className="secondary" onClick={()=>setDeleteBlocked(false)}>확인</button></Sheet>}
+ {deleteBlocked&&<Sheet title="세션 삭제 안내" onClose={()=>setDeleteBlocked(false)}><p className="confirmation-copy">진행 중인 세션은 삭제할 수 없어요. 세션을 종료한 뒤 삭제해주세요.</p><button type="button" className="secondary" onClick={()=>setDeleteBlocked(false)}>확인</button></Sheet>}
  {deleteTarget&&<ConfirmDialog title="세션을 삭제할까요?" confirmLabel="삭제" onCancel={()=>setDeleteTarget(null)} onConfirm={()=>{
   const item=deleteTarget;setDeleteTarget(null)
   void action.run(()=>deleteSession(item.id)).then(result=>{
