@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation } from 'react-router'
 import { useAuth } from '../../auth/AuthState'
 import { useMockApi } from '../../api/config'
 import { assets } from '../../assets/common'
+import PullToRefresh from './PullToRefresh'
 
 export function Header({ title, back = '/home' }: { title: string; back?: string }) {
   return <header className="page-header"><Link to={back} className="back-button" aria-label="뒤로"><img src={assets.back} alt="" /></Link><h1>{title}</h1></header>
@@ -21,5 +22,6 @@ export function BottomNav({ admin = false }: { admin?: boolean }) {
 export default function Layout() {
   const { pathname } = useLocation()
   const showNav = pathname === '/home' || pathname === '/mypage' || pathname.startsWith('/admin')
-  return <div className={`app-shell ${showNav ? 'with-nav' : ''}`}><main key={pathname}><Outlet /></main>{showNav && <BottomNav admin={pathname.startsWith('/admin') || pathname === '/mypage'} />}</div>
+  const canRefresh=!pathname.startsWith('/onboarding')&&!pathname.startsWith('/auth')&&!pathname.startsWith('/attendance')
+  return <div className={`app-shell ${showNav ? 'with-nav' : ''}`}><PullToRefresh key={pathname} enabled={canRefresh}><main><Outlet /></main></PullToRefresh>{showNav && <BottomNav admin={pathname.startsWith('/admin') || pathname === '/mypage'} />}</div>
 }
