@@ -18,7 +18,7 @@ export function AdminNotices() {
   if (!notices.length) return <p className="admin-empty" role="status">등록된 공지가 없어요</p>
   return <>
     <div className="admin-notice-list">{[...notices].sort((a, b) => Number(b.pinned) - Number(a.pinned)).map(item => <button type="button" key={item.id} className="admin-notice-card" aria-label={`공지 관리: ${item.title}`} onClick={() => setActionId(item.id)}>
-      <div className="admin-notice-meta">{item.pinned && <span>고정</span>}<time>{item.date}</time></div><h2>{item.title}</h2>
+      <div className="admin-notice-meta">{item.pinned && <span>고정</span>}<time>{item.date}</time></div><div className="admin-notice-content"><div className="admin-notice-copy"><h2>{item.title}</h2><p className="admin-notice-preview">{item.body}</p></div></div>
     </button>)}</div>
     {selected && <ItemActionsSheet title="공지 관리" onClose={() => setActionId(null)} onEdit={() => { setActionId(null); navigate(`/admin/notices/${selected.id}/edit`) }}
       onDelete={() => { setActionId(null); setDeleteId(selected.id) }} />}

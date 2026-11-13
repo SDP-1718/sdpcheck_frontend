@@ -7,19 +7,19 @@ import { useAction } from '../../../hooks/useAction'
 import { apiRequest } from '../../../api/client'
 import type { AdminNoticeList } from '../../../api/adminTypes'
 import type { NoticeDetailResponse } from '../../../api/types'
-import { dateParts } from '../../../api/dates'
 import Sheet from '../../../components/common/Sheet'
 import Toggle from '../../../components/common/Toggle'
 import ConfirmDialog from '../../../components/common/ConfirmDialog'
 import ItemActionsSheet from '../../../components/common/ItemActionsSheet'
 import NoticeImage from '../../../components/common/NoticeImage'
 import AsyncState from '../../../components/common/AsyncState'
+import AdminNoticeCard from './AdminNoticeCard'
 export default function LiveAdminNotices(){
  const query=useApiQuery<AdminNoticeList>('/api/v1/admin/notices'),action=useAction(),navigate=useNavigate()
  const [selected,setSelected]=useState<string|null>(null),[deleting,setDeleting]=useState<string|null>(null)
  const items=query.data?[...(query.data.pinnedNotice?[query.data.pinnedNotice]:[]),...query.data.items.filter(item=>item.id!==query.data?.pinnedNotice?.id)]:[]
  return <>
- {query.error?<AsyncState error onRetry={query.retry}/>:!query.data?<AsyncState/>:items.length?<div className="admin-notice-list">{items.map(item=><button className="admin-notice-card" key={item.id} aria-label={`공지 관리: ${item.title}`} onClick={()=>setSelected(item.id)}><div className="admin-notice-meta">{item.isPinned&&<span>고정</span>}<time>{dateParts(item.createdAt).date.replaceAll('-','.')}</time></div><h2>{item.title}</h2></button>)}</div>:<p className="admin-empty">등록된 공지가 없어요</p>}
+ {query.error?<AsyncState error onRetry={query.retry}/>:!query.data?<AsyncState/>:items.length?<div className="admin-notice-list">{items.map(item=><AdminNoticeCard key={item.id} notice={item} onClick={()=>setSelected(item.id)}/>)}</div>:<p className="admin-empty">등록된 공지가 없어요</p>}
  {action.error&&<p className="api-inline-empty" role="alert">{action.error}</p>}
  {selected&&<ItemActionsSheet title="공지 관리" onClose={()=>setSelected(null)} onEdit={()=>{navigate(`/admin/notices/${selected}/edit`);setSelected(null)}} onDelete={()=>{setDeleting(selected);setSelected(null)}}/>}
  {deleting&&<ConfirmDialog title="삭제할까요?" confirmLabel="삭제" onCancel={()=>setDeleting(null)} onConfirm={()=>{const id=deleting;setDeleting(null);void action.run(()=>apiRequest<void>(`/api/v1/admin/notices/${encodeURIComponent(id)}`,{method:'DELETE'})).then(result=>{if(result.ok)query.retry()})}}>삭제하면 되돌릴 수 없어요.</ConfirmDialog>}
