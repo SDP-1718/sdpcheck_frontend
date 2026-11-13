@@ -16,7 +16,6 @@ import type { AdminSession } from '../../types/admin'
 
 function LiveSession({ session }: { session: AdminSession }) {
   const { setSessions } = usePreview()
-  const [expanded, setExpanded] = useState(false)
   const finish = useCallback(() => setSessions(previous => previous.map(item => item.id === session.id ? { ...item, phase: 'ended' } : item)), [session.id, setSessions])
   const remaining = useSessionClock(session.endsAt, session.phase === 'active', finish)
   const ended = session.phase === 'ended' || remaining === 0
@@ -28,8 +27,8 @@ function LiveSession({ session }: { session: AdminSession }) {
       <progress value={6} max={17} aria-label="실시간 체크인 6명 / 17명" />
       {ended && <button className="primary ended-session-button" disabled>세션이 종료되었습니다</button>}
     </section>
-    <div className="section-title checkin-heading"><h2>체크인 현황</h2><button type="button" onClick={() => setExpanded(previous => !previous)}>{expanded ? '접기' : '더보기'}</button></div>
-    {previewCheckIns.slice(0, expanded ? previewCheckIns.length : 4).map(item => <div className="checkin-row" key={item.id}><div><h3>{item.name}</h3><p>{item.time} 체크인</p></div><span className="attendance-badge">출석</span></div>)}
+    <div className="section-title checkin-heading"><h2>체크인 현황</h2></div>
+    {previewCheckIns.map(item => <div className="checkin-row" key={item.id}><div><h3>{item.name}</h3><p>{item.time} 체크인</p></div><span className="attendance-badge">출석</span></div>)}
   </>
 }
 

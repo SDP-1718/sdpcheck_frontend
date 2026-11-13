@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react'
-import { Clock3, SwitchCamera } from 'lucide-react'
+import { Clock3, Plus, SwitchCamera } from 'lucide-react'
 import { Link } from 'react-router'
 import { useQrCamera } from '../../hooks/useQrCamera'
 import { usePinchZoom } from '../../hooks/usePinchZoom'
@@ -49,12 +49,8 @@ export default function Attendance({ preview = false, submitCode }: {
       <div className={`attendance-viewfinder ${state.phase === 'scanning' && !preview ? 'is-scanning' : ''}`} aria-label="QR 코드 촬영 영역. 두 손가락으로 확대하거나 축소할 수 있어요." tabIndex={!preview && state.phase === 'scanning' ? 0 : undefined} {...(!preview && state.phase === 'scanning' ? pinch.handlers : {})}>
         <video ref={videoRef} style={{transform:`scale(${pinch.zoom})`}} autoPlay muted playsInline aria-label="카메라 미리보기" />
         {!preview && state.phase === 'scanning' && <span className="attendance-zoom-label" aria-label={`확대 배율 ${pinch.zoom.toFixed(1)}배`}>{pinch.zoom.toFixed(1)}×</span>}
-        <div className="attendance-scan-line" aria-hidden="true" />
+        <Plus className="attendance-crosshair" size={32} strokeWidth={1.5} aria-hidden="true" />
         {(preview || state.phase !== 'scanning') && <Clock3 className="attendance-camera-clock" size={40} strokeWidth={1.5} aria-hidden="true" />}
-        <span className="scan-corner top-left" aria-hidden="true" />
-        <span className="scan-corner top-right" aria-hidden="true" />
-        <span className="scan-corner bottom-left" aria-hidden="true" />
-        <span className="scan-corner bottom-right" aria-hidden="true" />
       </div>
       {!preview && canSwitch && state.phase !== 'processing' && <button type="button" className="attendance-camera-switch" disabled={state.phase === 'loading'} onClick={()=>{pinch.reset();switchCamera()}}><SwitchCamera size={20} aria-hidden="true"/>카메라 전환</button>}
       {message && <div className="attendance-camera-message" role="status">
