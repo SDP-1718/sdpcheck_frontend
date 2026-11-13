@@ -29,7 +29,7 @@ export default function Statistics() {
       {[61.592,53.191,65.797,57.397,49.699,45.494].map((height, index) => <div className="chart-column" key={index}><span className="chart-bar" style={{height}} /><span>{['8/5','8/19','9/2','9/9','9/15','9/22'][index]}</span></div>)}
     </div>
     <div className="section-title members-heading"><h2>부원별 현황</h2><button type="button" className="statistics-sort-trigger" aria-haspopup="dialog" onClick={() => setSortOpen(true)}>{sortLabels[sort]}<ChevronDown size={10} aria-hidden="true" /></button></div>
-    {ordered.slice(0, 4).map(member => <div className="member-stat-row" key={member.id}><div><h3>{member.name}<span>{member.generation}기</span></h3><p>출석 {member.attendance} · 지각 {member.late} · 결석 {member.absent}</p></div><strong>{rate(member)}%</strong></div>)}
+    {ordered.map(member => <div className="member-stat-row" key={member.id}><div><h3>{member.name}<span>{member.generation}기</span></h3><p>출석 {member.attendance} · 지각 {member.late} · 결석 {member.absent}</p></div><strong>{rate(member)}%</strong></div>)}
     <div className="export-area"><button type="button" className="primary" onClick={download}><img src={assets.download} alt="" />엑셀로 내보내기</button></div>
     {sortOpen && <Sheet title="정렬 기준" className="statistics-sort-sheet" onClose={() => setSortOpen(false)}>
       {(['asc','desc','name'] as const).map(value => <button type="button" className={`statistics-sort-option ${sort === value ? 'is-selected' : ''}`} key={value}

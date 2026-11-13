@@ -22,7 +22,7 @@ import ItemActionsSheet from '../../../components/common/ItemActionsSheet'
 const labels={PRESENT:'출석',LATE:'지각',ABSENT:'결석',NOT_CHECKED_IN:'미출석'}
 function SessionBoard({session}:{session:SessionDetail}){
  const navigate=useNavigate(),action=useAction()
- const [expanded,setExpanded]=useState(false),[endOpen,setEndOpen]=useState(false),[settings,setSettings]=useState(false),[deleteOpen,setDeleteOpen]=useState(false)
+ const [endOpen,setEndOpen]=useState(false),[settings,setSettings]=useState(false),[deleteOpen,setDeleteOpen]=useState(false)
  const [attendanceTarget,setAttendanceTarget]=useState<{memberId:number;name:string}|null>(null)
  const live=usePollingQuery<SessionCheckIns>(session.status==='SCHEDULED'?null:`/api/v1/admin/sessions/${session.sessionId}/check-ins`)
  const status=live.data?.sessionStatus??session.status
@@ -68,9 +68,9 @@ function SessionBoard({session}:{session:SessionDetail}){
  {live.data&&<><div className="checkin-summary"><span>실시간 체크인</span><span>{live.data.summary.checkedInCount}/{live.data.summary.totalCount}명</span></div><progress value={live.data.summary.checkedInCount} max={Math.max(1,live.data.summary.totalCount)} aria-label="실시간 체크인"/></>}
  {active?<button className="secondary session-settings" disabled={action.pending} onClick={()=>setEndOpen(true)}>세션 종료하기</button>:<button className="primary ended-session-button" disabled>세션이 종료되었습니다</button>}
  </section>
- <div className="section-title checkin-heading"><h2>체크인 현황</h2><button onClick={()=>setExpanded(v=>!v)}>{expanded?'접기':'더보기'}</button></div>
+ <div className="section-title checkin-heading"><h2>체크인 현황</h2></div>
  {live.error&&<AsyncState error onRetry={live.retry}/>} {!live.data&&!live.error&&<AsyncState/>}
- {live.data?.members.slice(0,expanded?undefined:4).map(member=><div className="checkin-row" key={member.memberId}><div><h3>{member.name}</h3><p>{member.checkedInAt?`${dateParts(member.checkedInAt).time} 체크인`:`${member.generation}기`}</p></div><button type="button" disabled={action.pending} aria-label={`${member.name} 출석 상태 변경`} className={`attendance-badge status-${member.status.toLowerCase()}`} onClick={()=>setAttendanceTarget(member)}>{labels[member.status]}</button></div>)}
+ {live.data?.members.map(member=><div className="checkin-row" key={member.memberId}><div><h3>{member.name}</h3><p>{member.checkedInAt?`${dateParts(member.checkedInAt).time} 체크인`:`${member.generation}기`}</p></div><button type="button" disabled={action.pending} aria-label={`${member.name} 출석 상태 변경`} className={`attendance-badge status-${member.status.toLowerCase()}`} onClick={()=>setAttendanceTarget(member)}>{labels[member.status]}</button></div>)}
  </>}
  {attendanceTarget&&<Sheet title={`${attendanceTarget.name} 출석 상태`} onClose={()=>setAttendanceTarget(null)}>{(['PRESENT','LATE','ABSENT'] as const).map(value=><button className="generation-option" key={value} onClick={()=>{const member=attendanceTarget;setAttendanceTarget(null);void action.run(()=>apiRequest(`/api/v1/admin/sessions/${session.sessionId}/attendances/${member.memberId}`,{method:'PATCH',body:JSON.stringify({status:value})})).then(result=>{if(result.ok)live.retry()})}}>{labels[value]}</button>)}</Sheet>}
  {settings&&<ItemActionsSheet title="세션 관리" onClose={()=>setSettings(false)} onEdit={()=>{setSettings(false);navigate(`/admin/sessions/${session.sessionId}/edit`)}} onDelete={()=>{setSettings(false);setDeleteOpen(true)}}/>}
