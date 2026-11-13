@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { openQrCamera } from '../utils/qrCamera'
+import { captureQrFrame } from '../utils/qrFrame'
 import type { QrCameraDevice } from '../utils/qrCamera'
 import type { RefObject } from 'react'
 
 interface DetectedCode { rawValue: string }
-interface QrDetector { detect(source: HTMLVideoElement): Promise<DetectedCode[]> }
+interface QrDetector { detect(source: HTMLVideoElement | HTMLCanvasElement): Promise<DetectedCode[]> }
 interface QrDetectorConstructor {
   new (options: { formats: string[] }): QrDetector
   getSupportedFormats?: () => Promise<string[]>
@@ -27,24 +28,25 @@ export function useQrCamera(
   videoRef: RefObject<HTMLVideoElement | null>,
   onDecoded: (code: string) => Promise<void>,
   enabled: boolean,
+  zoom = 1,
 ) {
   const [state, setState] = useState<QrCameraState>({ phase: 'loading' })
   const [attempt, setAttempt] = useState(0)
   const [requestedId, setRequestedId] = useState<string | null>(null)
   const [cameraInfo, setCameraInfo] = useState<{ devices: QrCameraDevice[]; activeId: string }>({devices:[], activeId:''})
   const startup = useRef<Promise<void>>(Promise.resolve())
+  const zoomRef = useRef(1)
+  useEffect(() => { zoomRef.current = zoom }, [zoom])
 
   useEffect(() => {
     if (!enabled) return
     let disposed = false
     let stream: MediaStream | null = null
     let timer: number | undefined
-    let stopFallback: (() => void) | undefined
     let submitted = false
     const video = videoRef.current
 
     function stopCamera() {
-      stopFallback?.()
       stream?.getTracks().forEach(track => track.stop())
       if (video?.srcObject === stream) video.srcObject = null
     }
@@ -64,36 +66,30 @@ export function useQrCamera(
         const Detector = (window as Window & { BarcodeDetector?: QrDetectorConstructor }).BarcodeDetector
         const formats = await Detector?.getSupportedFormats?.()
         if (disposed) { stopCamera(); return }
+        const canvas = document.createElement('canvas')
+        let detector: QrDetector
         if (!Detector || (formats && !formats.includes('qr_code'))) {
           const { BrowserQRCodeReader } = await import('@zxing/browser')
           if (disposed) { stopCamera(); return }
           const reader = new BrowserQRCodeReader()
-          setState({ phase: 'scanning' })
-          const controls = await reader.decodeFromVideoElement(video, (result, _error, scanControls) => {
-            if (disposed || submitted || !result?.getText().trim()) return
-            submitted = true
-            scanControls.stop()
-            stopCamera()
-            setState({ phase: 'processing' })
-            void onDecoded(result.getText()).catch(() => {
-              if (!disposed) setState({ phase: 'error', reason: 'submission' })
-            })
-          })
-          stopFallback = () => controls.stop()
-          if (disposed || submitted) stopCamera()
-          return
-        }
-        const detector = new Detector({ formats: ['qr_code'] })
+          detector = { async detect(source) {
+            const frame = source instanceof HTMLCanvasElement ? source : captureQrFrame(source, zoomRef.current, canvas)
+            if (!frame) return []
+            try { return [{ rawValue: reader.decodeFromCanvas(frame).getText() }] }
+            catch { return [] }
+          } }
+        } else detector = new Detector({ formats: ['qr_code'] })
         setState({ phase: 'scanning' })
 
         async function detectNext() {
           if (disposed || !video) return
           try {
             const codes = video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA
-              ? await detector.detect(video) : []
+              ? await detector.detect(captureQrFrame(video, zoomRef.current, canvas) ?? video) : []
             if (disposed) return
             const code = codes.find(item => item.rawValue.trim())?.rawValue
-            if (code) {
+            if (code && !submitted) {
+              submitted = true
               stopCamera()
               setState({ phase: 'processing' })
               try { await onDecoded(code) }
