@@ -21,7 +21,7 @@
 .time-picker-sheet .sheet-heading { justify-content: center; margin-top: 20px; }
 .time-picker-sheet .sheet-heading h2 { font-size: 16px; line-height: 24px; }
 .time-wheel { position: relative; display: flex; height: 260px; }
-.time-wheel-column { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; }
+.time-wheel-column { touch-action: none; user-select: none; -webkit-user-select: none; position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; }
 .time-wheel-column button { width: 100%; height: 52px; flex-shrink: 0; color: var(--muted); font-size: 16px; line-height: 24px; }
 .time-wheel-column button.is-selected { color: #181818; font-size: 18px; }
 .time-wheel-column:focus-visible { outline: 2px solid #6d891e; outline-offset: -2px; }

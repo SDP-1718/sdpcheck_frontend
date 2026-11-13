@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import type { Dispatch, PointerEvent, SetStateAction } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Sheet from './Sheet'
 import { assets } from '../../assets/design'
@@ -33,28 +34,37 @@ function DatePicker({ value, onSelect, onClose }: { value: string; onSelect: (va
   </Sheet>
 }
 
+function TimeWheelColumn({value,onChange,max,step,unit}:{value:number;onChange:Dispatch<SetStateAction<number>>;max:number;step:number;unit:'시'|'분'}) {
+ const drag=useRef<{id:number;y:number;value:number;moved:boolean}|null>(null),suppressClick=useRef(false)
+ const wrap=(next:number)=>(next%max+max)%max
+ function move(event:PointerEvent<HTMLDivElement>){
+  const start=drag.current
+  if(!start||start.id!==event.pointerId)return
+  const delta=start.y-event.clientY
+  if(Math.abs(delta)>8){start.moved=true;event.currentTarget.setPointerCapture(event.pointerId)}
+  if(start.moved)onChange(wrap(start.value+Math.round(delta/52)*step))
+ }
+ function end(event:PointerEvent<HTMLDivElement>){
+  if(drag.current?.id!==event.pointerId)return
+  suppressClick.current=drag.current.moved;drag.current=null
+  if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId)
+ }
+ return <div className="time-wheel-column" role="group" aria-label={unit==='시'?'시 선택':'분 선택'} tabIndex={0}
+  onPointerDown={event=>{if(event.pointerType==='mouse'&&event.button!==0)return;suppressClick.current=false;drag.current={id:event.pointerId,y:event.clientY,value,moved:false}}}
+  onPointerMove={move} onPointerUp={end} onPointerCancel={()=>{drag.current=null;suppressClick.current=false}} onLostPointerCapture={event=>{if(event.target===event.currentTarget)drag.current=null}}
+  onClickCapture={event=>{if(suppressClick.current){event.preventDefault();event.stopPropagation();suppressClick.current=false}}}
+  onKeyDown={event=>{suppressClick.current=false;if(event.key==='ArrowUp'||event.key==='ArrowDown'){event.preventDefault();onChange(previous=>wrap(previous+(event.key==='ArrowUp'?-step:step)))}}}
+  onWheel={event=>{if(event.deltaY)onChange(previous=>wrap(previous+(event.deltaY>0?step:-step)))}}>
+  {[-2,-1,0,1,2].map(offset=>{const next=wrap(value+offset*step);return <button type="button" key={offset} className={offset===0?'is-selected':''} aria-pressed={offset===0} aria-label={`${next}${unit}`} onClick={()=>onChange(next)}>{String(next).padStart(2,'0')}</button>})}
+ </div>
+}
+
 function TimePicker({ value, onSelect, onClose }: { value: string; onSelect: (value: string) => void; onClose: () => void }) {
   const initial = validTime(value) ? value.split(':').map(Number) : [19, 0]
   const [hour, setHour] = useState(initial[0])
   const [minute, setMinute] = useState(initial[1])
-  const wrap = (value: number, max: number) => (value + max) % max
-  const column = (kind: 'hour' | 'minute') => {
-    const current = kind === 'hour' ? hour : minute
-    const max = kind === 'hour' ? 24 : 60
-    const step = kind === 'hour' ? 1 : 5
-    const update = kind === 'hour' ? setHour : setMinute
-    return <div className="time-wheel-column" role="group" aria-label={kind === 'hour' ? '시 선택' : '분 선택'} tabIndex={0}
-      onKeyDown={event => { if (event.key === 'ArrowUp' || event.key === 'ArrowDown') { event.preventDefault(); update(wrap(current + (event.key === 'ArrowUp' ? -step : step), max)) } }}
-      onWheel={event => { if (event.deltaY) update(wrap(current + (event.deltaY > 0 ? step : -step), max)) }}>
-      {[-2,-1,0,1,2].map(offset => {
-        const next = wrap(current + offset * step, max)
-        return <button type="button" key={offset} className={offset === 0 ? 'is-selected' : ''} aria-pressed={offset === 0}
-          aria-label={`${next}${kind === 'hour' ? '시' : '분'}`} onClick={() => update(next)}>{String(next).padStart(2, '0')}</button>
-      })}
-    </div>
-  }
   return <Sheet title="시간 선택" className="time-picker-sheet" onClose={onClose}>
-    <div className="time-wheel"><div className="time-wheel-highlight" aria-hidden="true" />{column('hour')}<span className="time-wheel-colon" aria-hidden="true">:</span>{column('minute')}</div>
+    <div className="time-wheel"><div className="time-wheel-highlight" aria-hidden="true" /><TimeWheelColumn value={hour} onChange={setHour} max={24} step={1} unit="시"/><span className="time-wheel-colon" aria-hidden="true">:</span><TimeWheelColumn value={minute} onChange={setMinute} max={60} step={5} unit="분"/></div>
     <button type="button" className="primary" onClick={() => onSelect(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`)}>확인</button>
   </Sheet>
 }
